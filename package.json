@@ -1,0 +1,10 @@
+{
+  "name": "anywent",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "api",
+    "web",
+    "packages/*"
+  ]
+}
