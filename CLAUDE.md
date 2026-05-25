@@ -123,12 +123,56 @@ Sentry — free tier, install from day one. One line of setup, full stacktraces 
 
 
 
+## Versioning
+
 AnyWent uses semantic versioning: `major.minor.patch` (e.g. `v0.3.1`).
 
 - Version lives in `package.json` and is surfaced in the app (footer or `/health` endpoint)
 - Bump version on every meaningful deploy — makes it easy to know what's running during testing
 - When PWA / service worker is added (v2+): version is used for cache busting — service worker checks version on load and forces refresh if stale
 - For MVP (regular web app, no service worker): versioning is informational only
+
+---
+
+## Auth Abstraction
+
+Clerk is the current auth provider but must never bleed into application code. This keeps the provider swappable with minimal effort later.
+
+**Rules — strictly enforced:**
+- Clerk imports appear in exactly **two files** and nowhere else:
+  - `api/src/middleware/auth.ts` — all Clerk verification logic
+  - `web/src/hooks/useAuth.ts` — all Clerk React hooks
+- No route, service, or component ever imports from `@clerk/fastify` or `@clerk/react` directly
+- Both files translate Clerk's data into AnyWent's own `AuthUser` type before passing it anywhere
+
+**Backend**
+```typescript
+// api/src/middleware/auth.ts — only file that imports Clerk
+export async function authenticate(request, reply) {
+  // Clerk verification here
+  request.user = { id: user.sub, email: user.email } // AnyWent's shape, not Clerk's
+}
+```
+
+**Frontend**
+```typescript
+// web/src/hooks/useAuth.ts — only file that imports Clerk
+export function useCurrentUser(): AuthUser {
+  // translate Clerk's user into AnyWent's AuthUser shape
+  return { id: user.id, email: user.email }
+}
+```
+
+**Shared type**
+```typescript
+// packages/shared/src/types/user.ts
+export interface AuthUser {
+  id: string
+  email: string
+}
+```
+
+`AuthUser` never references Clerk. Swapping providers means rewriting `auth.ts` and `useAuth.ts` only.
 
 ---
 
