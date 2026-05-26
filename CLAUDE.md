@@ -56,6 +56,7 @@ Do not build these in MVP. Flag them and defer:
 
 ## Coding Conventions
 
+- **Package manager**: pnpm — always use `pnpm install`, `pnpm add`, `pnpm run`. Never npm or yarn.
 - TypeScript everywhere, strict mode
 - All dates in UTC, stored as timestamptz in Postgres
 - All event links stored as original source URLs — never strip or modify
@@ -63,6 +64,25 @@ Do not build these in MVP. Flag them and defer:
 - Per-user data is always scoped by `user_id` — never leak between users
 - Environment variables for all API keys, never hardcoded
 - Comment any scraper logic that reverse-engineers an undocumented API — note the source and date
+
+---
+
+## Git Workflow
+
+- **Branch strategy**: commit directly to `main` for now — no feature branches until the team grows or a reason emerges
+- **Commit message format**: conventional commits — `feat:`, `fix:`, `chore:`, `docs:`, `refactor:` prefixes
+  - `feat: add RA scraper for Berlin`
+  - `fix: correct UTC offset in bundle ranking`
+  - `chore: bump version to 0.2.0`
+- **Version bumps**: always a separate `chore:` commit
+
+---
+
+## When to Proceed vs Ask
+
+- **Proceed without asking**: anything within the agreed structure, adding files in the right folders, installing packages, writing tests, following patterns already established in the codebase
+- **Ask before proceeding**: creating files outside the agreed structure, changing the data model, adding a new third-party dependency, anything destructive or irreversible
+- **Never proceed silently**: if something conflicts with these docs, flag it and ask — don't silently do it a different way
 
 ---
 
@@ -276,6 +296,31 @@ Start with services that are genuinely free (not trial free), scale only when ju
 - Cache aggressively — don't fetch what you already have
 - Always link back to original sources — never present scraped content as your own
 - Document any reverse-engineered API usage with date and source in code comments — these change without warning
+
+---
+
+### 9. Package manager — pnpm, always consistent
+
+- Use pnpm across all projects — faster, more disk-efficient, better for monorepos
+- Never mix package managers within a project (`pnpm install` only, no npm or yarn)
+- Commit `pnpm-lock.yaml` — never `.gitignore` it
+
+---
+
+### 10. Git workflow — simple and readable
+
+- **Solo projects**: commit directly to `main` — no feature branches until there's a real reason
+- **Commit format**: conventional commits — `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`
+- Version bumps always a separate `chore: bump version to x.x.x` commit
+- Keeps git log readable and pairs naturally with semantic versioning
+
+---
+
+### 11. Claude Code autonomy — proceed vs ask
+
+- **Proceed without asking**: files in agreed structure, installing packages, writing tests, following established patterns
+- **Ask before proceeding**: new files outside agreed structure, data model changes, new third-party dependencies, anything destructive or irreversible
+- **Never silently deviate**: if something conflicts with the docs, flag it and ask — don't quietly do it differently
 
 ---
 
