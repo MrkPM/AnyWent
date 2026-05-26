@@ -176,6 +176,113 @@ export interface AuthUser {
 
 ---
 
+## M's Engineering Principles
+
+These principles apply to this project and all future projects. They are the result of hard-won lessons and deliberate choices. Claude Code must follow them unless M explicitly overrides one.
+
+---
+
+### 1. Versioning — from day one, always
+
+- Semantic versioning (`major.minor.patch`) in `package.json` from the first commit
+- Version visible in the running app — footer and/or `/health` endpoint
+- Bump on every meaningful deploy — so you always know what's running during testing
+- Enables PWA cache busting when service workers are added later
+- Never start a project without this — retrofitting is painful
+
+---
+
+### 2. Testing — selective, not exhaustive
+
+- Don't chase coverage. Test the things where a bug would be **silent and painful**
+- **Unit test**: ranking/scoring algorithms, date/timezone handling, data parsers — things that can be wrong without throwing an error
+- **Integration test**: one smoke test per external integration (scraper, API client) — catches upstream changes
+- **E2E**: critical user path only (the thing that must always work) — use Playwright
+- **Migrations**: every migration must have a reversible `down` path
+- Start unit tests at MVP. Integration + E2E can wait for v2.
+
+---
+
+### 3. Vendor lock-in mitigation — abstraction layers
+
+Any third-party provider (auth, payments, email, maps, AI) must be wrapped in an abstraction layer so it can be swapped with minimal impact.
+
+**The pattern:**
+- Provider-specific code lives in **exactly one file** (e.g. `auth.ts`, `payments.ts`)
+- That file translates the provider's data into the app's own types before passing it anywhere
+- No other file ever imports the provider's SDK directly
+- The app's internal types (e.g. `AuthUser`, `PaymentResult`) never reference the provider
+
+**Applied in AnyWent:**
+- Clerk → `api/src/middleware/auth.ts` + `web/src/hooks/useAuth.ts` only
+- Any future provider (maps, payments, AI) follows the same pattern
+
+---
+
+### 4. Cost-minimising stack — free tiers first
+
+Start with services that are genuinely free (not trial free), scale only when justified by real usage.
+
+**Proven free tier stack:**
+| Need | Provider | Notes |
+|---|---|---|
+| Database | Supabase | Full Postgres, free tier generous |
+| Frontend hosting | Vercel | Unlimited personal projects |
+| Backend hosting | Railway / Render | Free tier sufficient for early prod |
+| Auth | Clerk | Free up to 10,000 MAU |
+| Cache / queues | Upstash | Serverless Redis, free tier |
+| Always-on jobs | Oracle Cloud free tier | ARM VM, genuinely permanent free |
+| Error monitoring | Sentry | Free tier, install from day one |
+| Email pipeline | n8n self-hosted | Free on Oracle VM |
+
+**Rules:**
+- Never pay for something until free tier is genuinely exhausted
+- Prefer services with a clear, predictable upgrade path
+- Self-host where it's low-maintenance and free (n8n on Oracle)
+- Redis and similar caching layers: defer until scraper/request volume actually justifies them
+
+---
+
+### 5. Environment variable discipline
+
+- All secrets in `.env` — never hardcoded, never committed
+- `.env.example` always committed alongside — lists every variable with empty values
+- New variable added to code = must be added to `.env.example` in the same commit
+- `.env` always in `.gitignore` — verify before first push to any new repo
+
+---
+
+### 6. Schema-first thinking
+
+- Design the data model before writing any application code
+- Build for the future shape even if MVP only uses part of it — cheap now, expensive to retrofit
+- Every migration has a reversible `down` path
+- Shared types defined once in `packages/shared` — never duplicated between frontend and backend
+
+---
+
+### 7. Isolate async processes
+
+- Background jobs (scrapers, sync tasks, email processing) are isolated processes — never called inline by the API
+- Jobs write to DB only — the API only reads
+- A failing job never crashes the main app — log, skip, alert
+- Job runs are logged to a `scraper_runs` table (or equivalent) — always know when something last ran successfully
+
+---
+
+### 8. Good citizen API usage
+
+- Respect rate limits of every external API — stay well within them
+- Cache aggressively — don't fetch what you already have
+- Always link back to original sources — never present scraped content as your own
+- Document any reverse-engineered API usage with date and source in code comments — these change without warning
+
+---
+
+*This list grows with every project. When a new principle is learned, add it here.*
+
+---
+
 ## People
 
 Built by M. Single developer. Pragmatic > perfect.
