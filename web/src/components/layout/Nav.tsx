@@ -2,8 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import styles from './Nav.module.css'
 
 const links = [
-  { to: '/',      label: 'Discover' },
-  { to: '/saved', label: 'Saved' },
+  { to: '/', label: 'Discover' },
 ]
 
 export function Nav() {

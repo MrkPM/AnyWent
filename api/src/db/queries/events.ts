@@ -56,8 +56,8 @@ export async function getEventsByCity(
     LEFT JOIN event_artists ea ON ea.event_id = e.id
     LEFT JOIN artists a ON a.id = ea.artist_id
     WHERE v.city_id = ${cityId}
-      AND e.starts_at >= ${from}::timestamptz
-      AND e.starts_at <  ${to}::timestamptz + interval '1 day'
+      AND e.starts_at < ${to}::timestamptz + interval '1 day'
+      AND COALESCE(e.ends_at, e.starts_at) >= ${from}::timestamptz
     GROUP BY e.id, v.id
     ORDER BY e.starts_at ASC
   `
