@@ -10,6 +10,7 @@ const schema = z.object({
   DB_PASSWORD: z.string(),
   CLERK_SECRET_KEY: z.string(),
   SENTRY_DSN: z.string().optional(),
+  CORS_ORIGIN: z.string().optional(), // set to frontend URL in production
 })
 
 export const env = schema.parse(process.env)

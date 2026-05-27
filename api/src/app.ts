@@ -11,7 +11,9 @@ export async function buildApp() {
       : { level: 'info' },
   })
 
-  await app.register(cors, { origin: true })
+  await app.register(cors, {
+    origin: env.CORS_ORIGIN ?? true, // tighten to frontend URL via CORS_ORIGIN in production
+  })
 
   app.setErrorHandler(errorHandler)
 
