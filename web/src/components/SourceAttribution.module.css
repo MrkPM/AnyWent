@@ -1,0 +1,7 @@
+.attribution {
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: color 0.15s;
+}
+
+.attribution:hover { color: var(--accent); }
