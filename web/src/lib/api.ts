@@ -1,6 +1,9 @@
 import type { ApiCity, ApiEvent, EventsResponse } from '../types/index.js'
 
-const BASE = '/api'
+// In local dev, VITE_API_URL is unset — requests go to /api and the Vite proxy
+// strips the prefix and forwards to localhost:3000.
+// In production, set VITE_API_URL to the deployed API base URL (e.g. https://api.anywent.com).
+const BASE = import.meta.env.VITE_API_URL ?? '/api'
 
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`)

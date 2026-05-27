@@ -1,10 +1,20 @@
+import { useEffect, useMemo } from 'react'
 import { QueryBar } from '../components/QueryBar.js'
 import { EventCard } from '../components/EventCard.js'
 import { useEvents } from '../hooks/useEvents.js'
+import { upcomingWeekend } from '../lib/dates.js'
 import styles from './Home.module.css'
+
+const DEFAULT_CITY = 'berlin'
 
 export function Home() {
   const { data, loading, error, load } = useEvents()
+  const defaultWeekend = useMemo(() => upcomingWeekend(), [])
+
+  // Auto-load on mount with the same defaults the QueryBar shows
+  useEffect(() => {
+    load(DEFAULT_CITY, defaultWeekend.from, defaultWeekend.to)
+  }, [load, defaultWeekend])
 
   return (
     <div>

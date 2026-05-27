@@ -287,6 +287,18 @@ export async function scrapeRA(cityKey: keyof typeof RA_AREAS, dateFrom: string,
 
       for (const listing of listings) {
         const raEvent = listing.event
+
+        // Skip events with no contentUrl — can't form a valid source_url for deduplication
+        if (!raEvent.contentUrl) {
+          console.warn(`[ra] skipping event ${raEvent.id} — no contentUrl`)
+          continue
+        }
+        // Skip events with no venue — online/venue-less listings we can't place on a map
+        if (!raEvent.venue) {
+          console.warn(`[ra] skipping event ${raEvent.id} — no venue`)
+          continue
+        }
+
         try {
           const venueId = await upsertVenue(raEvent.venue, cityId)
           const artistIds = await Promise.all(raEvent.artists.map(upsertArtist))
