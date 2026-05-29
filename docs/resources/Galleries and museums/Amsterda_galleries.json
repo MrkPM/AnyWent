@@ -1,0 +1,170 @@
+[
+  {
+    "name": "Rijksmuseum",
+    "type": "museum",
+    "website": "https://www.rijksmuseum.nl",
+    "curated_focus": "Dutch Masters, Fine Art History & Golden Age Art"
+  },
+  {
+    "name": "Van Gogh Museum",
+    "type": "museum",
+    "website": "https://www.vangoghmuseum.nl",
+    "curated_focus": "19th-Century Art, Post-Impressionism & Van Gogh Studies"
+  },
+  {
+    "name": "Stedelijk Museum Amsterdam",
+    "type": "museum",
+    "website": "https://www.stedelijk.nl",
+    "curated_focus": "Modern Art, Contemporary Design & Digital Media"
+  },
+  {
+    "name": "Rembrandt House Museum",
+    "type": "museum",
+    "website": "https://www.rembrandthuis.nl",
+    "curated_focus": "17th-Century History, Classical Art & Fine Etchings"
+  },
+  {
+    "name": "Foam",
+    "type": "museum",
+    "website": "https://www.foam.org",
+    "curated_focus": "Fine Art Photography, Fashion & Documentary Media"
+  },
+  {
+    "name": "STRAAT Museum",
+    "type": "museum",
+    "website": "https://straatmuseum.com",
+    "curated_focus": "Street Art, Graffiti & Monumental Urban Installations"
+  },
+  {
+    "name": "Anne Frank House",
+    "type": "museum",
+    "website": "https://www.annefrank.org",
+    "curated_focus": "WWII History, Social Memory & Human Rights"
+  },
+  {
+    "name": "H'ART Museum",
+    "type": "museum",
+    "website": "https://www.hartmuseum.nl",
+    "curated_focus": "Global Fine Art, High-Concept Exhibitions & Heritage"
+  },
+  {
+    "name": "Nxt Museum",
+    "type": "museum",
+    "website": "https://nxtmuseum.com",
+    "curated_focus": "New Media, Immersive Digital Art & Sound Installations"
+  },
+  {
+    "name": "Huis Marseille",
+    "type": "museum",
+    "website": "https://huismarseille.nl",
+    "curated_focus": "Historical Photography, Contemporary Prints & Visual Narrative"
+  },
+  {
+    "name": "AKINCI",
+    "type": "gallery",
+    "website": "https://akinci.nl",
+    "curated_focus": "Contemporary Art, Multimedia & Site-Specific Works"
+  },
+  {
+    "name": "andriesse ~ eyck gallery",
+    "type": "gallery",
+    "website": "https://andriesse-eyck.com",
+    "curated_focus": "International Contemporary Art, Painting & Photography"
+  },
+  {
+    "name": "Annet Gelink Gallery",
+    "type": "gallery",
+    "website": "https://annetgelink.com",
+    "curated_focus": "Contemporary Art, Conceptual Media & Emerging Talent"
+  },
+  {
+    "name": "Bildhalle",
+    "type": "gallery",
+    "website": "https://www.bildhalle.ch",
+    "curated_focus": "Fine Art Photography, Swiss Art & Contemporary Prints"
+  },
+  {
+    "name": "De Appel",
+    "type": "project_space",
+    "website": "https://deappel.nl",
+    "curated_focus": "Experimental Art, Performance & Curatorial Research"
+  },
+  {
+    "name": "Ellen de Bruijne Projects",
+    "type": "gallery",
+    "website": "https://edbprojects.com",
+    "curated_focus": "Feminist Art, Conceptual Projects & Video Media"
+  },
+  {
+    "name": "Enari Gallery",
+    "type": "gallery",
+    "website": "https://enarigallery.com",
+    "curated_focus": "Contemporary Painting, Modern Expressionism & Sculpture"
+  },
+  {
+    "name": "Framer Framed",
+    "type": "project_space",
+    "website": "https://framerframed.nl",
+    "curated_focus": "Intercultural Art, Political Discourse & Visual Narratives"
+  },
+  {
+    "name": "Galerie Bart",
+    "type": "gallery",
+    "website": "https://galeriebart.nl",
+    "curated_focus": "Contemporary Art, Dutch Talent & Mixed Media"
+  },
+  {
+    "name": "Galerie Fons Welters",
+    "type": "gallery",
+    "website": "https://fonswelters.nl",
+    "curated_focus": "Contemporary Sculpture, Installation & Emerging Media"
+  },
+  {
+    "name": "Galerie Ron Mandos",
+    "type": "gallery",
+    "website": "https://ronmandos.nl",
+    "curated_focus": "Large-scale Contemporary Art, Fine Painting & Dutch Talent"
+  },
+  {
+    "name": "GRIMM",
+    "type": "gallery",
+    "website": "https://grimmgallery.com",
+    "curated_focus": "International Contemporary Art, Painting & Sculptural Forms"
+  },
+  {
+    "name": "Lumen Travo Gallery",
+    "type": "gallery",
+    "website": "https://lumentravo.nl",
+    "curated_focus": "Global Contemporary Art, Post-Colonial Narratives & Diversity"
+  },
+  {
+    "name": "No Man's Art Gallery",
+    "type": "gallery",
+    "website": "https://nomansart.com",
+    "curated_focus": "International Emerging Art, Cross-Border Schemes & Painting"
+  },
+  {
+    "name": "Slewe Gallery",
+    "type": "gallery",
+    "website": "https://slewe.nl",
+    "curated_focus": "Abstract Art, Minimalism & Geometric Design"
+  },
+  {
+    "name": "Stigter van Doesburg",
+    "type": "gallery",
+    "website": "https://stigtervandoesburg.com",
+    "curated_focus": "International Contemporary Art, Video Works & Conceptualism"
+  },
+  {
+    "name": "TORCH Gallery",
+    "type": "gallery",
+    "website": "https://torchgallery.com",
+    "curated_focus": "Lowbrow Art, Radical Contemporary & Subversive Media"
+  },
+  {
+    "name": "W139",
+    "type": "project_space",
+    "website": "https://w139.nl",
+    "curated_focus": "Artist-run Contemporary Projects & Non-Commercial Initiatives"
+  }
+]

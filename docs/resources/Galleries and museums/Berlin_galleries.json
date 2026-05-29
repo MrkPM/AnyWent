@@ -1,0 +1,128 @@
+[
+  {
+    "name": "Alte Nationalgalerie",
+    "type": "museum",
+    "website": "https://www.smb.museum/museen-einrichtungen/alte-nationalgalerie",
+    "curated_focus": "Neoclassical, Romantic, Impressionist & Early Modernist Artwork"
+  },
+  {
+    "name": "Altes Museum",
+    "type": "museum",
+    "website": "https://www.smb.museum/museen-einrichtungen/altes-museum",
+    "curated_focus": "Classical Antiquities, Ancient Greek, Etruscan & Roman Art"
+  },
+  {
+    "name": "Pergamonmuseum",
+    "type": "museum",
+    "website": "https://www.smb.museum/museen-einrichtungen/pergamonmuseum",
+    "curated_focus": "Monumental Antiquities, Islamic Art & Middle Eastern History"
+  },
+  {
+    "name": "Hamburger Bahnhof - Nationalgalerie der Gegenwart",
+    "type": "museum",
+    "website": "https://www.smb.museum/museen-einrichtungen/hamburger-bahnhof",
+    "curated_focus": "Contemporary Art, Post-1960 Media, Installations & Conceptual Art"
+  },
+  {
+    "name": "Neue Nationalgalerie",
+    "type": "museum",
+    "website": "https://www.smb.museum/museen-einrichtungen/neue-nationalgalerie",
+    "curated_focus": "20th-Century Classical Modernism, Bauhaus & European Avant-Garde"
+  },
+  {
+    "name": "KW Institute for Contemporary Art",
+    "type": "project_space",
+    "website": "https://www.kw-berlin.de",
+    "curated_focus": "Progressive Contemporary Art, Experimental Commissions & Berlin Biennale"
+  },
+  {
+    "name": "C/O Berlin",
+    "type": "museum",
+    "website": "https://co-berlin.org",
+    "curated_focus": "International Photography, Visual Media & Emerging Talents"
+  },
+  {
+    "name": "Berlinische Galerie",
+    "type": "museum",
+    "website": "https://berlinischegalerie.de",
+    "curated_focus": "Modern Art, Photography, Architecture & Berlin-Centric Artists"
+  },
+  {
+    "name": "Gropius Bau",
+    "type": "museum",
+    "website": "https://www.gropiusbau.de",
+    "curated_focus": "High-Concept International Contemporary Art & Historical Exhibitions"
+  },
+  {
+    "name": "Boros Foundation",
+    "type": "museum",
+    "website": "https://www.sammlung-boros.de",
+    "curated_focus": "Private Contemporary Collection housed in a Historic WWII Bunker"
+  },
+  {
+    "name": "König Galerie",
+    "type": "gallery",
+    "website": "https://www.koeniggalerie.com",
+    "curated_focus": "Contemporary Sculpture, Painting & Digital Media inside St. Agnes Church"
+  },
+  {
+    "name": "Sprüth Magers",
+    "type": "gallery",
+    "website": "https://spruethmagers.com",
+    "curated_focus": "International Contemporary Art, Conceptual Art & Feminism"
+  },
+  {
+    "name": "Galerie Max Hetzler",
+    "type": "gallery",
+    "website": "https://www.maxhetzler.com",
+    "curated_focus": "High-End, Museum-Quality Contemporary Painting & Large-Scale Sculpture"
+  },
+  {
+    "name": "Galerie Thomas Schulte",
+    "type": "gallery",
+    "website": "https://www.galeriethomasschulte.de",
+    "curated_focus": "Conceptual Art, Minimalist Architecture & Installation"
+  },
+  {
+    "name": "ChertLüdde",
+    "type": "gallery",
+    "website": "https://chertluedde.com",
+    "curated_focus": "Contemporary Conceptual Art, Archival & Emerging International Artists"
+  },
+  {
+    "name": "Dittrich & Schlechtriem",
+    "type": "gallery",
+    "website": "https://dittrich-schlechtriem.com",
+    "curated_focus": "New Media, Conceptual Sculpture, Performance & Post-Digital Art"
+  },
+  {
+    "name": "Carlier | Gebauer",
+    "type": "gallery",
+    "website": "https://www.carliergebauer.com",
+    "curated_focus": "International Photography, Video Art, Installations & Sculptural Media"
+  },
+  {
+    "name": "Galerie Buchholz",
+    "type": "gallery",
+    "website": "https://www.galeriebuchholz.de",
+    "curated_focus": "Intellectual Conceptual Art, Sculpture, Prints & Fine Art Books"
+  },
+  {
+    "name": "KLEMM'S",
+    "type": "gallery",
+    "website": "https://klemmsberlin.com",
+    "curated_focus": "Contemporary Narrative Photography, Painting & Conceptual Prints"
+  },
+  {
+    "name": "Art Laboratory Berlin",
+    "type": "project_space",
+    "website": "https://artlaboratory-berlin.org",
+    "curated_focus": "Interdisciplinary Art-and-Science, Bio-Art & Technology Projects"
+  },
+  {
+    "name": "Schinkel Pavillon",
+    "type": "project_space",
+    "website": "https://www.schinkelpavillon.de",
+    "curated_focus": "Experimental Contemporary Sculpture, Performance & Avant-Garde Installations"
+  }
+]
