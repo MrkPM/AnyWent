@@ -35,6 +35,27 @@
   flex-direction: column;
 }
 
+/* Date grouping */
+.dateGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.dateHeader {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: var(--text-muted);
+  padding: 32px 0 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dateGroup:first-child .dateHeader {
+  padding-top: 4px;
+}
+
 .error {
   font-family: var(--font-mono);
   font-size: 12px;

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { formatDate, formatTime } from '../lib/dates.js'
+import { formatTime } from '../lib/dates.js'
 import type { ApiEvent } from '../types/index.js'
 import styles from './EventCard.module.css'
 
@@ -44,7 +44,7 @@ export function EventCard({ event }: Props) {
 
       <div className={styles.right}>
         <span className={styles.datetime}>
-          {formatDate(event.startsAt)} · {formatTime(event.startsAt)}
+          {formatTime(event.startsAt)}
         </span>
         {event.ticketUrl ? (
           <a

@@ -18,6 +18,13 @@ export function upcomingWeekend(): { from: string; to: string } {
   return { from: toDateInput(fri), to: toDateInput(sun) }
 }
 
+// Format a YYYY-MM-DD date string as "Thursday 4 Jun" for date group headers.
+// Uses local noon to avoid DST edge-case shifts.
+export function formatGroupDate(isoDate: string): string {
+  const d = new Date(isoDate + 'T12:00:00')
+  return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' })
+}
+
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-GB', {
     weekday: 'short', day: 'numeric', month: 'short',

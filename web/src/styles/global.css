@@ -2,13 +2,15 @@
   --bg:           #0a0a0a;
   --bg-card:      #111;
   --bg-hover:     #141414;
-  --text:         #efefef;
-  --text-muted:   #666;
-  --text-dim:     #2e2e2e;
+  --text:           #efefef;
+  --text-secondary: #999;
+  --text-muted:     #666;
+  --text-dim:       #2e2e2e;
   --accent:       #d4a843;
   --accent-dim:   rgba(212, 168, 67, 0.1);
   --border:       #1c1c1c;
   --border-mid:   #2a2a2a;
+  --bg-raised:    #141414;
   --green:        #4caf76;
   --red:          #e05e5e;
   --radius:       6px;
