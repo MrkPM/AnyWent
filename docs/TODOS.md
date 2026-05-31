@@ -52,6 +52,7 @@
 - [ ] Affiliate URL field on events (populated post-MVP)
 - [ ] Scraper jobs isolated from main API (write-only to DB)
 - [ ] `scraper_runs` table (source, started_at, finished_at, events_upserted, errors)
+- [ ] Event retention job — strip full event rows to skeleton (venue_id, artist_ids, type, date, source) after 12 months. Full delete after 24 months. Attendance records never deleted. Defer until table is actually unwieldy. Design the skeleton schema before building the cleanup job.
 
 ---
 

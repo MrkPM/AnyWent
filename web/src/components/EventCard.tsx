@@ -4,7 +4,7 @@ import type { ApiEvent } from '../types/index.js'
 import styles from './EventCard.module.css'
 
 const SOURCE_LABELS: Record<string, string> = {
-  ra: 'RA', songkick: 'Songkick', dice: 'Dice', email: 'Newsletter', manual: 'AnyWent',
+  ra: 'RA', songkick: 'Songkick', goout: 'GoOut', dice: 'Dice', email: 'Newsletter', manual: 'AnyWent',
 }
 
 interface Props { event: ApiEvent }
@@ -22,6 +22,16 @@ export function EventCard({ event }: Props) {
 
   return (
     <Link to={`/events/${event.id}`} className={styles.card}>
+      <div className={styles.thumb}>
+        {event.imageUrl && (
+          <img
+            src={event.imageUrl}
+            alt=""
+            className={styles.thumbImg}
+            onError={e => { e.currentTarget.style.display = 'none' }}
+          />
+        )}
+      </div>
       <div className={styles.left}>
         <div className={styles.title}>{title}</div>
         {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
