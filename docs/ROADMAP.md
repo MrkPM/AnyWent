@@ -78,6 +78,14 @@ Goal: a single-user web app that answers "what's on in Berlin next weekend" and 
 - [ ] Bandsintown API integration
 - [ ] Premium tier / subscription
 - [ ] Promoter/venue listing tier
+- [ ] **User-submitted events flow** — "I know about an event that's missing" UGC layer
+  - User submits a URL + date + city
+  - LLM checks fit against schema (type, venue, dates parseable), lightweight moderation, human approval
+  - Stored with `source = 'user_submitted'`
+  - Users with skin in the game become invested; respects good-citizen principle (source URLs preserved)
+  - Natural path toward the community layer that makes AnyWent sticky
+  - Reference: `docs/resources/Inspiration/Songkick_form_categories/` — Songkick's artist/promoter/venue submission forms as UX inspiration for categories, fields, and flow
+  - Note: Songkick exposes artist/promoter submissions (ticketing platform model). AnyWent's version is simpler and user-focused — not a ticketing layer
 
 ---
 

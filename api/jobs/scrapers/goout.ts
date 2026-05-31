@@ -74,6 +74,7 @@ interface GoOutEvent {
   id: number
   name: string
   url: string
+  mainImage: { src: string } | null
 }
 
 interface GoOutSchedule {
@@ -247,10 +248,13 @@ async function upsertEvent(
   startsAt: string,
   endsAt: string | null,
 ): Promise<string> {
+  // GoOut image src uses %%% as a size placeholder; 800 is the only available width
+  const imageUrl = goEvent.mainImage?.src.replace('%%%', '800') ?? null
+
   const [row] = await sql`
     INSERT INTO events (
       venue_id, title, type, starts_at, ends_at,
-      source, source_url, ticket_url, verified_at
+      source, source_url, ticket_url, image_url, verified_at
     )
     VALUES (
       ${venueId},
@@ -259,8 +263,9 @@ async function upsertEvent(
       ${startsAt}::timestamptz,
       ${endsAt}::timestamptz,
       'goout',
-      ${schedule.url},
+      ${goEvent.url},
       ${schedule.ticketsUrl ?? null},
+      ${imageUrl},
       now()
     )
     ON CONFLICT (source_url) DO UPDATE
@@ -276,6 +281,7 @@ async function upsertEvent(
                       END,
         ends_at     = EXCLUDED.ends_at,
         ticket_url  = EXCLUDED.ticket_url,
+        image_url   = EXCLUDED.image_url,
         verified_at = now(),
         updated_at  = now()
     RETURNING id
@@ -338,15 +344,23 @@ export async function scrapeGoOut(
           console.log(`[goout] skipping schedule ${schedule.id} — state: ${schedule.state}`)
           continue
         }
-        // Skip events with no URL (can't form source_url for deduplication)
-        if (!schedule.url) {
-          console.warn(`[goout] skipping schedule ${schedule.id} — no url`)
-          continue
-        }
-
         const goEvent = response.events[String(schedule.eventId)]
         if (!goEvent) {
           console.warn(`[goout] skipping schedule ${schedule.id} — event ${schedule.eventId} not in response`)
+          continue
+        }
+
+        // Dedup key is goEvent.url (event-level page), not schedule.url (time-slot URL).
+        // This collapses all time slots of the same event into one DB row — correct for
+        // a weekend planner where we need "TITANIC is on", not 18 booking slots per day.
+        if (!goEvent.url) {
+          console.warn(`[goout] skipping schedule ${schedule.id} — goEvent ${schedule.eventId} has no url`)
+          continue
+        }
+
+        // Skip school group tours — "Školy –" prefix = scheduled field trips for school
+        // groups, not public events. Not relevant to a weekend tripper.
+        if (goEvent.name.startsWith('Školy')) {
           continue
         }
 

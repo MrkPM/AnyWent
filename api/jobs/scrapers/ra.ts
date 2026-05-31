@@ -62,6 +62,9 @@ const EVENT_LISTINGS_QUERY = `
           endTime
           contentUrl
           isTicketed
+          images {
+            filename
+          }
           venue {
             id
             name
@@ -111,6 +114,7 @@ interface RaEvent {
   endTime: string | null
   contentUrl: string
   isTicketed: boolean
+  images: { filename: string }[]
   venue: RaVenue
   artists: RaArtist[]
 }
@@ -217,11 +221,13 @@ async function upsertArtist(raArtist: RaArtist): Promise<string> {
 
 async function upsertEvent(raEvent: RaEvent, venueId: string): Promise<string> {
   const sourceUrl = `https://ra.co${raEvent.contentUrl}`
+  // RA returns full image URLs in images[0].filename despite the field name
+  const imageUrl = raEvent.images?.[0]?.filename ?? null
 
   const [row] = await sql`
     INSERT INTO events (
       venue_id, title, type, starts_at, ends_at,
-      source, source_url, verified_at
+      source, source_url, image_url, verified_at
     )
     VALUES (
       ${venueId},
@@ -231,6 +237,7 @@ async function upsertEvent(raEvent: RaEvent, venueId: string): Promise<string> {
       ${raEvent.endTime ?? null},
       'ra',
       ${sourceUrl},
+      ${imageUrl},
       now()
     )
     ON CONFLICT (source_url) DO UPDATE
@@ -238,6 +245,7 @@ async function upsertEvent(raEvent: RaEvent, venueId: string): Promise<string> {
         title       = EXCLUDED.title,
         starts_at   = EXCLUDED.starts_at,
         ends_at     = EXCLUDED.ends_at,
+        image_url   = EXCLUDED.image_url,
         verified_at = now(),
         updated_at  = now()
     RETURNING id

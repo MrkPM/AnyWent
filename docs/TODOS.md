@@ -4,6 +4,12 @@
 
 ---
 
+## Standing Rules
+
+- [ ] **Every new event source must capture `image_url`** — check what image field the source provides before building the scraper, store it in `events.image_url`. Option A for now: store URL and hotlink directly (no download/re-hosting). Never add a scraper without confirming image availability first.
+
+---
+
 ## Data Sources
 
 - [ ] Resident Advisor GraphQL scraper (Berlin, Amsterdam, Prague)
@@ -37,6 +43,10 @@
 - [ ] Redis caching layer (scraper responses, rate limiting) — defer from MVP, add when needed
 - [ ] Stale event flagging (thresholds per source type)
 - [ ] Cross-source deduplication logic (same event from RA + Dice etc.)
+- [ ] `curated_focus` (or `notes`) text column on venues — useful for LLM email pipeline so the extractor knows a venue's focus (photography vs conceptual art vs street art) when scoring relevance (v2)
+- [ ] Unicode normalization on venue slugs — NFD + strip combining chars (e.g. Sprüth Magers → spruth-magers, ChertLüdde → chertludde). Currently strips non-ASCII entirely, producing ugly slugs like spr-th-magers. Fix before launch.
+- [ ] GoOut scraper: add keyword filter for commerce/subscription titles (předplatné, abonma, poukaz) — ~2% noise, defer from MVP
+- [ ] Songkick festival-as-venue pattern — when a festival has no fixed venue, Songkick sets location.name = event name (e.g. "We Wheel Survive 2026 @ We Wheel Survive 2026"). Harmless in DB, but display logic should detect title === venue name and suppress the venue label or show "Various locations" instead.
 - [ ] `raw_data` jsonb field on events for scraper debugging
 - [ ] `source_url` always stored and always linked — never stripped
 - [ ] Affiliate URL field on events (populated post-MVP)
@@ -80,6 +90,7 @@
 - [ ] Bundle card list view
 - [ ] City weekend view (drill-down from bundle)
 - [ ] Event detail view (full lineup, source attribution, ticket link)
+- [ ] EventCard image fallback — ~22% of RA events have no image (no flyer uploaded at source, nothing to hotlink). UI needs a graceful fallback: venue image → city image → neutral placeholder. Design for this from the start, not as an afterthought.
 - [ ] Artist page (upcoming events, affinity indicator)
 - [ ] Venue page (upcoming events, affinity indicator)
 - [ ] Saved / bookmarked events screen
@@ -108,6 +119,16 @@
 - [ ] Integration tests — one smoke test per scraper (validates output shape against real API)
 - [ ] E2E test — critical path: query → bundle results → event detail → source link present (Playwright)
 - [ ] Schema migration tests — every migration should have a reversible down path
+
+---
+
+## Community / UGC
+
+- [ ] User-submitted events flow (v3) — "I know about an event that's missing"
+  - Submit URL + date + city; LLM validates fit against schema; human approval; stored as `source = 'user_submitted'`
+  - Reference: `docs/resources/Inspiration/Songkick_form_categories/` (Songkick UX — categories, fields, form flow)
+- [ ] Add `source = 'user_submitted'` to the events source check constraint when building this
+- [ ] Moderation queue for user-submitted events (admin view)
 
 ---
 
