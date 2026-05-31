@@ -63,6 +63,7 @@
 - [ ] Spotify: import followed artists
 - [ ] Spotify: import top artists (stronger signal)
 - [ ] Spotify: import saved albums (weaker signal)
+- [ ] SoundCloud connect — OAuth enrichment (v2) — import followed artists + liked tracks; particularly relevant for electronic/club audience where many artists are SoundCloud-first and may have no Spotify presence; complements Spotify rather than replacing it
 - [ ] Apple Music connect (same pattern as Spotify)
 - [ ] YouTube Music connect (same pattern as Spotify)
 - [ ] Venue affinity tracking (manual + derived from attendance)

@@ -55,6 +55,7 @@ Goal: a single-user web app that answers "what's on in Berlin next weekend" and 
 - [ ] Schema migration tests (up + down for every migration)
 - [ ] Multi-user auth (Clerk, full onboarding flow)
 - [ ] Spotify connect (taste enrichment — followed artists + top artists)
+- [ ] SoundCloud connect (taste enrichment — follows + liked tracks; covers electronic/club artists absent from Spotify)
 - [ ] Attendance logging (log events you've been to)
 - [ ] Email ingest pipeline (n8n + LLM extraction for museum newsletters)
 - [ ] Dice.fm scraper
@@ -92,6 +93,7 @@ Goal: a single-user web app that answers "what's on in Berlin next weekend" and 
 ## Future / Speculative
 
 - Apple Music / YouTube Music connect (same pattern as Spotify)
+- SoundCloud moved to V2 — higher priority than Apple/YouTube for the electronic/club use case
 - Festival coverage (Festivalfinder, manual)
 - Per-venue scrapers for major museums without newsletters
 - "Friends are going" social layer
@@ -110,6 +112,7 @@ Goal: a single-user web app that answers "what's on in Berlin next weekend" and 
 | 2026 | Geography hierarchy (country → region → city) | Cheap to design in now, painful to retrofit; enables festival + small city coverage |
 | 2026 | Global event data, per-user taste | Clean separation; multi-user ready from day one |
 | 2026 | Always store source_url | Good citizen principle; never hide where data came from |
+| 2026 | SoundCloud connect in V2 alongside Spotify | Electronic/club artists often have no Spotify presence; SoundCloud follows are a stronger signal for this audience than Spotify top artists |
 | 2026 | n8n self-hosted on Oracle Cloud free tier | Always-free ARM VM, always-on, no cold starts, no cost |
 | 2026 | Redis deferred from MVP | Postgres timestamp checks sufficient at MVP scale; add Redis when scraper volume justifies it |
 | 2026 | Semantic versioning from day one | Know what's deployed during testing; foundation for PWA cache busting in v2 |

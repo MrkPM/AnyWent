@@ -217,8 +217,12 @@ async function upsertEvent(
   skEvent: SkEvent,
   venueId: string,
 ): Promise<string> {
-  // startDate is sometimes datetime ("2026-05-29T19:30:00"), sometimes date-only ("2026-05-29")
-  const startsAt = skEvent.startDate.length === 10
+  // startDate is sometimes datetime ("2026-05-29T19:30:00"), sometimes date-only ("2026-05-29").
+  // Metro listing pages almost always return date-only — no time data available.
+  // When date-only, store midnight UTC as a placeholder and flag time_known = false
+  // so the UI can render '–' rather than a meaningless derived time.
+  const isDateOnly = skEvent.startDate.length === 10
+  const startsAt   = isDateOnly
     ? `${skEvent.startDate}T00:00:00.000Z`
     : skEvent.startDate
 
@@ -230,7 +234,7 @@ async function upsertEvent(
   const [row] = await sql`
     INSERT INTO events (
       venue_id, title, type, starts_at, ends_at,
-      source, source_url, image_url, verified_at
+      source, source_url, image_url, time_known, verified_at
     )
     VALUES (
       ${venueId},
@@ -241,6 +245,7 @@ async function upsertEvent(
       'songkick',
       ${skEvent.url},
       ${skEvent.image ?? null},
+      ${!isDateOnly},
       now()
     )
     ON CONFLICT (source_url) DO UPDATE
@@ -249,6 +254,7 @@ async function upsertEvent(
         starts_at   = EXCLUDED.starts_at,
         ends_at     = EXCLUDED.ends_at,
         image_url   = COALESCE(EXCLUDED.image_url, events.image_url),
+        time_known  = EXCLUDED.time_known,
         verified_at = now(),
         updated_at  = now()
     RETURNING id

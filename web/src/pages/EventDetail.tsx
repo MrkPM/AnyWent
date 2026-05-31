@@ -78,7 +78,7 @@ export function EventDetail() {
         <span>{VENUE_TYPE_LABELS[event.venue.type] ?? event.venue.type}</span>
         <span className={styles.dot}>·</span>
         <span>{formatDateRange(event.startsAt, event.endsAt)}</span>
-        {!isMultiDay && (
+        {!isMultiDay && event.timeKnown && (
           <>
             <span className={styles.dot}>·</span>
             <span>{formatTime(event.startsAt)}</span>

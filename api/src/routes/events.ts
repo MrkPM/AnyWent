@@ -14,6 +14,7 @@ function toApiEvent(row: EventRow) {
     sourceUrl: row.source_url,
     ticketUrl: row.ticket_url,
     imageUrl: row.image_url,
+    timeKnown: row.time_known,
     venue: {
       id: row.venue_id,
       name: row.venue_name,

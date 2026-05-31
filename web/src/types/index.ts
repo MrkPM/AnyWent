@@ -32,6 +32,7 @@ export interface ApiEvent {
   sourceUrl: string
   ticketUrl: string | null
   imageUrl: string | null
+  timeKnown: boolean
   venue: ApiVenue
   artists: ApiEventArtist[]
 }

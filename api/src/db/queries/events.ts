@@ -10,6 +10,7 @@ export interface EventRow {
   source_url: string
   ticket_url: string | null
   image_url: string | null
+  time_known: boolean
   venue_id: string
   venue_name: string
   venue_slug: string
@@ -38,6 +39,7 @@ export async function getEventsByCity(
       e.source_url,
       e.ticket_url,
       e.image_url,
+      e.time_known,
       v.id   AS venue_id,
       v.name AS venue_name,
       v.slug AS venue_slug,
@@ -77,6 +79,7 @@ export async function getEventById(id: string): Promise<EventRow | null> {
       e.source_url,
       e.ticket_url,
       e.image_url,
+      e.time_known,
       v.id   AS venue_id,
       v.name AS venue_name,
       v.slug AS venue_slug,

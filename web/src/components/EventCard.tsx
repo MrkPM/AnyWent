@@ -44,7 +44,7 @@ export function EventCard({ event }: Props) {
 
       <div className={styles.right}>
         <span className={styles.datetime}>
-          {formatTime(event.startsAt)}
+          {event.timeKnown ? formatTime(event.startsAt) : '–'}
         </span>
         {event.ticketUrl ? (
           <a
