@@ -3,6 +3,7 @@ import styles from './SourceAttribution.module.css'
 const SOURCE_LABELS: Record<string, string> = {
   ra:       'Resident Advisor',
   songkick: 'Songkick',
+  goout:    'GoOut',
   dice:     'Dice',
   email:    'Newsletter',
   manual:   'AnyWent',
