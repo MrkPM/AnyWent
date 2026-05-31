@@ -56,6 +56,14 @@
   padding-top: 4px;
 }
 
+.loading {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-top: 24px;
+}
+
 .error {
   font-family: var(--font-mono);
   font-size: 12px;

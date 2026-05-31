@@ -60,6 +60,7 @@ export function Home() {
         loading={loading}
       />
 
+      {loading && !data && <p className={styles.loading}>Loading…</p>}
       {error && <p className={styles.error}>{error}</p>}
 
       {data && (
