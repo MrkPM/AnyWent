@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify'
+import { authenticateOptional } from '../middleware/auth.js'
 import { getCityBySlug } from '../db/queries/cities.js'
 import { getEventsByCity, getEventById } from '../db/queries/events.js'
 import type { EventRow } from '../db/queries/events.js'
@@ -13,8 +14,9 @@ function toApiEvent(row: EventRow) {
     source: row.source,
     sourceUrl: row.source_url,
     ticketUrl: row.ticket_url,
-    imageUrl: row.image_url,
-    timeKnown: row.time_known,
+    imageUrl:      row.image_url,
+    timeKnown:     row.time_known,
+    affinityScore: Number(row.affinity_score),
     venue: {
       id: row.venue_id,
       name: row.venue_name,
@@ -28,7 +30,7 @@ function toApiEvent(row: EventRow) {
 export async function eventsRoutes(app: FastifyInstance) {
   app.get<{
     Querystring: { citySlug: string; from: string; to: string }
-  }>('/events', async (req, reply) => {
+  }>('/events', { preHandler: authenticateOptional }, async (req, reply) => {
     const { citySlug, from, to } = req.query
 
     if (!citySlug || !from || !to) {
@@ -40,7 +42,8 @@ export async function eventsRoutes(app: FastifyInstance) {
       return reply.status(404).send({ error: 'City not found' })
     }
 
-    const rows = await getEventsByCity(city.id, from, to)
+    const userId = req.user?.id ?? null
+    const rows = await getEventsByCity(city.id, from, to, userId)
     return reply.send({ city, events: rows.map(toApiEvent) })
   })
 

@@ -2,6 +2,13 @@ export type * from '@anywent/shared'
 
 // API response shapes (joined/enriched versions of the base types)
 
+export interface ApiArtist {
+  id:     string
+  name:   string
+  slug:   string
+  genres: string[]
+}
+
 export interface ApiCity {
   id: string
   name: string
@@ -31,8 +38,9 @@ export interface ApiEvent {
   source: string
   sourceUrl: string
   ticketUrl: string | null
-  imageUrl: string | null
-  timeKnown: boolean
+  imageUrl:      string | null
+  timeKnown:     boolean
+  affinityScore: number
   venue: ApiVenue
   artists: ApiEventArtist[]
 }
