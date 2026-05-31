@@ -63,9 +63,21 @@
 - [ ] Spotify: import followed artists
 - [ ] Spotify: import top artists (stronger signal)
 - [ ] Spotify: import saved albums (weaker signal)
-- [ ] SoundCloud connect — OAuth enrichment (v2) — import followed artists + liked tracks; particularly relevant for electronic/club audience where many artists are SoundCloud-first and may have no Spotify presence; complements Spotify rather than replacing it
+  - **ToS note**: commercial use confirmed acceptable — Bandsintown runs Spotify, YouTube Music, and Amazon Music integrations commercially; establishes this use case as accepted by these platforms
+- [ ] SoundCloud connect — OAuth enrichment (v2)
+  - ~~⚠️ Verify commercial use terms~~ — **ToS concern resolved**: Bandsintown runs Spotify, YouTube Music, and Amazon Music integrations commercially, confirming this use case is accepted. Proceed when ready.
+  - **API status**: self-service registration now open (no approval queue), but requires an active **Artist Pro** subscription (~$99) to instantly generate Client ID + Client Secret
+  - **OAuth flow**: Authorization Code Flow + PKCE (standard)
+  - **Key endpoints**: `GET /me/followings` (followed artists/DJs) and `GET /me/likes/tracks` (liked tracks/mixes — club fans save live sets, radio shows, dubplates here)
+  - **Genre caveat**: SoundCloud has no clean structured genres on artist profiles — genre tags are messy user strings (`#Techno`, `#Deep House / Minimal`). Don't rely on genre taxonomy for matching.
+  - **Matching strategy**: name-based cross-reference — if user follows Marlon Hoffstadt on SoundCloud and an event in the DB lists Marlon Hoffstadt, that's a match. Same approach as Spotify artist name matching.
+  - **Schema note**: existing `source_ids JSONB` on `artists` table already handles multi-platform IDs correctly (`{ ra: ..., songkick: ..., soundcloud: ... }`) — no schema change needed, just populate `source_ids->>'soundcloud'` on connect
+  - Complements Spotify for artists with stronger SoundCloud presence (underground DJs, producers, label accounts with no Spotify)
+- [ ] YouTube Music connect — OAuth enrichment (v2)
+  - Google OAuth; reads liked/saved artists
+  - **ToS note**: Bandsintown runs this commercially — use case confirmed acceptable
+  - Same unified `source_ids` JSONB pattern as Spotify and SoundCloud
 - [ ] Apple Music connect (same pattern as Spotify)
-- [ ] YouTube Music connect (same pattern as Spotify)
 - [ ] Venue affinity tracking (manual + derived from attendance)
 - [ ] Affinity co-occurrence model: attended event → update artist weights for full lineup
   - Headliner: +0.4, support: +0.15, same bill: +0.05 (tunable weights)
