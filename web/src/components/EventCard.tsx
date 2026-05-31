@@ -47,25 +47,19 @@ export function EventCard({ event }: Props) {
           {event.timeKnown ? formatTime(event.startsAt) : '–'}
         </span>
         {event.ticketUrl ? (
-          <a
-            href={event.ticketUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
             className={styles.tickets}
-            onClick={e => e.stopPropagation()}
+            onClick={e => { e.preventDefault(); e.stopPropagation(); window.open(event.ticketUrl!, '_blank', 'noopener,noreferrer') }}
           >
             Tickets ↗
-          </a>
+          </button>
         ) : (
-          <a
-            href={event.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
             className={styles.source}
-            onClick={e => e.stopPropagation()}
+            onClick={e => { e.preventDefault(); e.stopPropagation(); window.open(event.sourceUrl, '_blank', 'noopener,noreferrer') }}
           >
             {SOURCE_LABELS[event.source] ?? event.source} ↗
-          </a>
+          </button>
         )}
       </div>
     </Link>
