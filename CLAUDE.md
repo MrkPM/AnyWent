@@ -12,15 +12,32 @@ It is not a competitor to RA or Songkick. It is a conduit — aggregating, perso
 
 > "I can go somewhere in Europe next weekend. Where should I go, and what should I do when I get there?"
 
-Two query modes:
-- **Discovery mode**: "Show me the best weekends across Europe in the next 4 weeks" → ranked city/weekend bundles
-- **City mode**: "What's on in Berlin the weekend after next" → fixed city, filtered and ranked by taste
+---
+
+## Three User Journeys
+
+These are the three query modes the product is built around. Each is a distinct mental model and UI pattern. All three will eventually be reflected in the nav.
+
+### Journey 1 — Discovery: "Just tell me where to go"
+> One confident recommendation, ranked by taste. No configuration required.
+
+The most differentiated journey — nothing else does this well. Surface a single "best pick" with visible reasoning: *"7 artists you follow are playing in Berlin this weekend — best window in 6 weeks."* Requires meaningful taste data to work (Spotify import). **V2.**
+
+### Journey 2 — Calendar: "Show me what's on when and where"
+> Chronological agenda across cities, taste-ranked within each window.
+
+Multi-city view across upcoming weekends. User can optionally filter by city. Partially built — the discovery screen (`/discover`) is a first pass at this. Multi-city filter is **V2.**
+
+### Journey 3 — City: "I'm going to Berlin 18–21 Jun, what's on?"
+> Single city + date range, ranked by taste.
+
+Already built (`/` city mode). The most familiar query pattern — closest to RA/Songkick but personalised.
 
 ---
 
 ## Current Status
 
-Brainstorm and architecture phase complete. Moving into build.
+MVP feature-complete. Discovery UI shipped. Pausing on layout iteration.
 
 ---
 
