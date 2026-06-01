@@ -4,22 +4,22 @@ Agreed feature sequence. Not a strict sprint plan — order reflects dependencie
 
 ---
 
-## Shipped (MVP)
+## Shipped (MVP → v0.2.0)
 
 - [x] Event scraping — RA, Songkick, GoOut
 - [x] City mode — query events by city + date range
 - [x] Taste profile — follow artists
 - [x] Affinity ranking — events sorted by artist affinity within date groups (MVP weights: follow = 1.0, baseline = 0.1 — intentionally simple, designed to extend)
 - [x] Auth — Clerk, sign up / sign in
+- [x] Discovery API — `GET /bundles` (live, weekend-aligned) + `GET /windows` (pre-computed, sliding 4-day windows, density profile, baseline scoring + read-time personalisation)
 
 ---
 
 ## Next
 
-### 1. Discovery mode
-Multi-city bundle view — "best weekends across Europe in the next 4 weeks."
-Ranked city/weekend bundles by aggregate affinity score across the user's taste profile.
-This is the north-star query mode.
+### 1. Discovery UI
+Frontend for the windows/bundles data — the discovery screen.
+API is ready; awaiting UI design decisions from Claude.ai conversation.
 
 ### 2. Venue following
 Follow venues (same pattern as artist following).
