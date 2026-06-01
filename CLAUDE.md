@@ -328,6 +328,27 @@ Start with services that are genuinely free (not trial free), scale only when ju
 
 ---
 
+## Agreed Decisions
+
+Design and product decisions that are settled — don't re-open unless M explicitly revisits them.
+
+### Ranking weight model
+
+Affinity scoring is additive across three signal types:
+
+| Signal | Weight |
+|---|---|
+| Artist follow (manual) | 1.0 |
+| Venue follow | 0.6 |
+| Genre / style follow | 0.4 |
+| Baseline (no match) | 0.1 |
+
+An event's score = sum of matched weights across all three types. Events with no matches score 0.1 and stay visible but rank last within their date group.
+
+**Co-occurrence recommendations** (e.g. "users who follow X also follow Y") are deferred to v2. They require real user data to be meaningful — don't build until that data exists.
+
+---
+
 ## People
 
 Built by M. Single developer. Pragmatic > perfect.
