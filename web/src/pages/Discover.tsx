@@ -17,27 +17,58 @@ function formatDateRange(start: string, end: string): string {
     : `${s.getUTCDate()} ${sm} – ${e.getUTCDate()} ${em}`
 }
 
-// ── Time horizon grouping ─────────────────────────────────────────────────────
+// ── Calendar week grouping (Mon–Sun) ─────────────────────────────────────────
 
-function horizonKey(daysUntil: number): number {
-  return Math.floor(Math.max(daysUntil, 0) / 7)
+// Returns the Monday of the week containing the given YYYY-MM-DD date.
+function weekMonday(dateStr: string): string {
+  const d = new Date(dateStr + 'T12:00:00Z')
+  const day = d.getUTCDay()                        // 0=Sun … 6=Sat
+  const offset = day === 0 ? 6 : day - 1          // days since Monday
+  d.setUTCDate(d.getUTCDate() - offset)
+  return d.toISOString().slice(0, 10)
 }
 
-function horizonLabel(key: number): string {
-  if (key === 0) return 'This Weekend'
-  if (key === 1) return 'Next Weekend'
-  return `In ${key + 1} Weeks`
+function thisMonday(): string {
+  return weekMonday(new Date().toISOString().slice(0, 10))
 }
 
-function groupByHorizon(windows: EventWindow[]): [number, EventWindow[]][] {
-  const map = new Map<number, EventWindow[]>()
+function weekLabel(mondayStr: string): string {
+  const base = thisMonday()
+  const next = new Date(base + 'T12:00:00Z')
+  next.setUTCDate(next.getUTCDate() + 7)
+  if (mondayStr === base) return 'This Week'
+  if (mondayStr === next.toISOString().slice(0, 10)) return 'Next Week'
+  const d = new Date(mondayStr + 'T12:00:00Z')
+  return `Week of ${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`
+}
+
+function weekDateRange(mondayStr: string): string {
+  const mon = new Date(mondayStr + 'T12:00:00Z')
+  const sun = new Date(mon)
+  sun.setUTCDate(mon.getUTCDate() + 6)
+  return formatDateRange(mon.toISOString().slice(0, 10), sun.toISOString().slice(0, 10))
+}
+
+// Group by Mon–Sun calendar week; within each week keep only the best-scoring
+// window per city (a city appears once per week, not once per pre-computed window).
+function groupByCalendarWeek(windows: EventWindow[]): [string, EventWindow[]][] {
+  // week → city → best window
+  const weeks = new Map<string, Map<string, EventWindow>>()
   for (const w of windows) {
-    const key = horizonKey(w.daysUntil)
-    if (!map.has(key)) map.set(key, [])
-    map.get(key)!.push(w)
+    const week = weekMonday(w.startDate)
+    if (!weeks.has(week)) weeks.set(week, new Map())
+    const cities = weeks.get(week)!
+    const existing = cities.get(w.city.id)
+    if (!existing || w.affinityScore > existing.affinityScore) {
+      cities.set(w.city.id, w)
+    }
   }
-  // Sort horizons chronologically; within each, windows already ordered by score from API
-  return [...map.entries()].sort(([a], [b]) => a - b)
+  return [...weeks.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([week, cityMap]) => [
+      week,
+      [...cityMap.values()].sort((a, b) => b.affinityScore - a.affinityScore),
+    ])
 }
 
 // ── Density bars ──────────────────────────────────────────────────────────────
@@ -110,19 +141,14 @@ function WindowCard({ window: w, rank }: { window: EventWindow; rank: number }) 
   )
 }
 
-// ── Horizon section ───────────────────────────────────────────────────────────
+// ── Week section ──────────────────────────────────────────────────────────────
 
-function HorizonSection({ horizonKey: key, windows }: { horizonKey: number; windows: EventWindow[] }) {
-  // Date span of the earliest start → latest end in this group
-  const dates = windows.map(w => w.startDate).sort()
-  const ends  = windows.map(w => w.endDate).sort()
-  const span  = formatDateRange(dates[0], ends[ends.length - 1])
-
+function WeekSection({ monday, windows }: { monday: string; windows: EventWindow[] }) {
   return (
     <div className={styles.section}>
       <div className={styles.sectionHeader}>
-        <span className={styles.sectionLabel}>{horizonLabel(key)}</span>
-        <span className={styles.sectionDates}>{span}</span>
+        <span className={styles.sectionLabel}>{weekLabel(monday)}</span>
+        <span className={styles.sectionDates}>{weekDateRange(monday)}</span>
       </div>
       {windows.map((w, i) => (
         <WindowCard key={w.id} window={w} rank={i + 1} />
@@ -158,14 +184,14 @@ export function Discover() {
     })()
   }, [])
 
-  const horizons = data ? groupByHorizon(data.windows) : []
+  const weeks = data ? groupByCalendarWeek(data.windows) : []
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
         <h1 className={styles.heading}>Where next?</h1>
         <p className={styles.subheading}>
-          Best cities by time window, ranked by what's on — personalised when signed in.
+          Best cities by week, ranked by what's on — personalised when signed in.
         </p>
       </header>
 
@@ -178,12 +204,12 @@ export function Discover() {
 
       {error && <p className={styles.error}>{error}</p>}
 
-      {data && horizons.length === 0 && (
+      {data && weeks.length === 0 && (
         <p className={styles.empty}>No upcoming windows found. Check back once scrapers have run.</p>
       )}
 
-      {horizons.map(([key, windows]) => (
-        <HorizonSection key={key} horizonKey={key} windows={windows} />
+      {weeks.map(([monday, windows]) => (
+        <WeekSection key={monday} monday={monday} windows={windows} />
       ))}
     </div>
   )
