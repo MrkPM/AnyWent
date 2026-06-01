@@ -1,8 +1,8 @@
 // Only file in the codebase that imports from @clerk/react
-import { ClerkProvider, useUser, useAuth as useClerkAuth } from '@clerk/react'
+import { ClerkProvider, SignInButton, useUser, useAuth as useClerkAuth } from '@clerk/react'
 import type { AuthUser } from '../types/index.js'
 
-export { ClerkProvider as AuthProvider }
+export { ClerkProvider as AuthProvider, SignInButton as AuthSignInButton }
 
 export function useCurrentUser(): AuthUser | null {
   const { user } = useUser()
@@ -18,4 +18,12 @@ export function useCurrentUser(): AuthUser | null {
 export function useGetToken(): () => Promise<string | null> {
   const { getToken } = useClerkAuth()
   return getToken
+}
+
+// True once Clerk has finished determining auth state (signed-in or signed-out).
+// Always wait for this before calling getToken() — getToken() will block indefinitely
+// if called before Clerk has loaded, hanging any request that depends on it.
+export function useAuthIsLoaded(): boolean {
+  const { isLoaded } = useClerkAuth()
+  return isLoaded
 }

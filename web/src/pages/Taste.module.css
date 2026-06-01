@@ -23,6 +23,25 @@
   font-size: 13px;
   color: var(--text-muted);
   margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+.signInBtn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: none;
+  border: 1px solid rgba(212, 168, 67, 0.35);
+  border-radius: var(--radius);
+  padding: 10px 20px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.signInBtn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
 }
 
 /* ── Section label ─────────────────────────────────────────────── */

@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { QueryBar } from '../components/QueryBar.js'
 import { EventCard } from '../components/EventCard.js'
 import { useEvents } from '../hooks/useEvents.js'
+import { useGetToken } from '../hooks/useAuth.js'
 import { upcomingWeekend, formatGroupDate } from '../lib/dates.js'
 import type { ApiEvent } from '../types/index.js'
 import styles from './Home.module.css'
@@ -37,8 +38,23 @@ export function Home() {
   const defaultWeekend = useMemo(() => upcomingWeekend(), [])
   const [activeFrom, setActiveFrom] = useState(defaultWeekend.from)
 
+  const getToken    = useGetToken()
+  const getTokenRef = useRef(getToken)
+  getTokenRef.current = getToken
+
+  // Events are public — load immediately without waiting for Clerk.
+  // Auth token is fetched non-blockingly via Promise.race with a short timeout
+  // so a slow/uninitialised Clerk never delays the initial render.
+  // If no token is available within the timeout, events load with baseline scoring.
   useEffect(() => {
-    load(DEFAULT_CITY, defaultWeekend.from, defaultWeekend.to)
+    const TOKEN_TIMEOUT_MS = 500
+    void (async () => {
+      const token = await Promise.race([
+        getTokenRef.current().catch(() => null),
+        new Promise<null>(resolve => setTimeout(() => resolve(null), TOKEN_TIMEOUT_MS)),
+      ]).then(t => t ?? undefined)
+      load(DEFAULT_CITY, defaultWeekend.from, defaultWeekend.to, token)
+    })()
   }, [load, defaultWeekend])
 
   const grouped = useMemo(
@@ -55,7 +71,10 @@ export function Home() {
       <QueryBar
         onSearch={q => {
           setActiveFrom(q.from)
-          load(q.citySlug, q.from, q.to)
+          void (async () => {
+            const token = await getTokenRef.current().catch(() => null).then(t => t ?? undefined)
+            load(q.citySlug, q.from, q.to, token)
+          })()
         }}
         loading={loading}
       />

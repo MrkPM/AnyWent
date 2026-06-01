@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { searchArtists } from '../lib/api.js'
 import { useTaste } from '../hooks/useTaste.js'
-import { useCurrentUser } from '../hooks/useAuth.js'
+import { useCurrentUser, AuthSignInButton } from '../hooks/useAuth.js'
 import type { ApiArtist } from '../types/index.js'
 import styles from './Taste.module.css'
 
@@ -48,7 +48,12 @@ export function Taste() {
     return (
       <div className={styles.page}>
         <h1 className={styles.heading}>Your Taste</h1>
-        <p className={styles.unauthenticated}>Sign in to build your taste profile and get personalised event rankings.</p>
+        <p className={styles.unauthenticated}>
+          Sign in to build your taste profile and get personalised event rankings.
+        </p>
+        <AuthSignInButton mode="modal">
+          <button className={styles.signInBtn}>Sign in</button>
+        </AuthSignInButton>
       </div>
     )
   }
