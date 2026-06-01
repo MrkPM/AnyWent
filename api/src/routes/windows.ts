@@ -42,7 +42,7 @@ async function getWindows(daysOut: number, limit: number): Promise<WindowRow[]> 
     JOIN   regions  r  ON r.id  = c.region_id
     JOIN   countries co ON co.id = r.country_id
     WHERE  ew.start_date >= CURRENT_DATE
-      AND  ew.start_date <= CURRENT_DATE + ${daysOut}
+      AND  ew.start_date <= CURRENT_DATE + ${daysOut}::int
     ORDER BY ew.affinity_score DESC
     LIMIT  ${limit}
   `

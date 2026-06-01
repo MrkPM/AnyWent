@@ -147,8 +147,8 @@ async function upsertWindows(cityId: string, windows: ScoredWindow[]): Promise<v
         ${w.end.toISOString().slice(0, 10)},
         ${w.eventCount},
         ${w.score},
-        ${sql.array(w.topArtistIds)},
-        ${sql.array(w.densityProfile)},
+        ${sql.array(w.topArtistIds)}::uuid[],
+        ${sql.array(w.densityProfile)}::smallint[],
         NOW()
       )
       ON CONFLICT (city_id, start_date, end_date) DO UPDATE SET
