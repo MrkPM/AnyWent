@@ -22,34 +22,31 @@ interface WindowRow {
 }
 
 async function getWindows(daysOut: number, limit: number): Promise<WindowRow[]> {
-  // CTE picks the best window per city (DISTINCT ON), then outer query re-sorts
-  // by score so the ranked list is meaningful ("where should I go" not "when in Berlin").
+  // Calendar model: return ALL pre-computed windows within the date range.
+  // Frontend groups by time horizon (7-day buckets). Duplicate cities across
+  // horizons is correct — Berlin this weekend and Berlin in 3 weeks are different trips.
   return sql<WindowRow[]>`
-    WITH best_per_city AS (
-      SELECT DISTINCT ON (ew.city_id)
-        ew.id,
-        ew.city_id,
-        c.name       AS city_name,
-        c.slug       AS city_slug,
-        co.code      AS country_code,
-        co.name      AS country_name,
-        ew.start_date::text,
-        ew.end_date::text,
-        ew.event_count,
-        ew.affinity_score,
-        ew.top_artist_ids,
-        ew.density_profile,
-        ew.computed_at
-      FROM   event_windows ew
-      JOIN   cities   c  ON c.id  = ew.city_id
-      JOIN   regions  r  ON r.id  = c.region_id
-      JOIN   countries co ON co.id = r.country_id
-      WHERE  ew.start_date >= CURRENT_DATE
-        AND  ew.start_date <= CURRENT_DATE + ${daysOut}::int
-      ORDER BY ew.city_id, ew.affinity_score DESC
-    )
-    SELECT * FROM best_per_city
-    ORDER BY affinity_score DESC
+    SELECT
+      ew.id,
+      ew.city_id,
+      c.name       AS city_name,
+      c.slug       AS city_slug,
+      co.code      AS country_code,
+      co.name      AS country_name,
+      ew.start_date::text,
+      ew.end_date::text,
+      ew.event_count,
+      ew.affinity_score,
+      ew.top_artist_ids,
+      ew.density_profile,
+      ew.computed_at
+    FROM   event_windows ew
+    JOIN   cities   c  ON c.id  = ew.city_id
+    JOIN   regions  r  ON r.id  = c.region_id
+    JOIN   countries co ON co.id = r.country_id
+    WHERE  ew.start_date >= CURRENT_DATE
+      AND  ew.start_date <= CURRENT_DATE + ${daysOut}::int
+    ORDER BY ew.affinity_score DESC
     LIMIT  ${limit}
   `
 }

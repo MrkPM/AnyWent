@@ -7,7 +7,6 @@
 .header {
   padding: 48px 0 40px;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 0;
 }
 
 .heading {
@@ -27,21 +26,45 @@
   letter-spacing: 0.04em;
 }
 
-/* ── List ────────────────────────────────────────────────────────────────── */
+/* ── Horizon section ─────────────────────────────────────────────────────── */
 
-.list {
+.section {
+  margin-top: 40px;
+}
+
+.sectionHeader {
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-mid);
+  margin-bottom: 0;
+}
+
+.sectionLabel {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  text-transform: none;
+}
+
+.sectionDates {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
 }
 
 /* ── Card ────────────────────────────────────────────────────────────────── */
 
 .card {
   display: grid;
-  grid-template-columns: 52px 1fr auto;
+  grid-template-columns: 44px 1fr auto;
   align-items: center;
-  gap: 24px;
-  padding: 24px 0;
+  gap: 20px;
+  padding: 20px 0;
   border-bottom: 1px solid var(--border);
   background: none;
   border-radius: 0;
@@ -51,8 +74,8 @@
   width: 100%;
   text-align: left;
   position: relative;
-  transition: background 0.15s;
   cursor: pointer;
+  transition: background 0.12s;
 }
 
 .card::before {
@@ -65,30 +88,21 @@
   background: var(--accent);
   transform: scaleY(0);
   transform-origin: center;
-  transition: transform 0.2s ease;
+  transition: transform 0.18s ease;
 }
 
 .card:hover::before { transform: scaleY(1); }
-.card:hover { background: var(--bg-hover); }
-
-.cardTop {
-  padding: 28px 0;
-}
+.card:hover         { background: var(--bg-hover); }
 
 /* ── Rank ────────────────────────────────────────────────────────────────── */
 
 .rank {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.06em;
   color: var(--text-dim);
-  line-height: 1;
   align-self: start;
-  padding-top: 6px;
-}
-
-.rankTop {
-  color: var(--accent);
+  padding-top: 5px;
 }
 
 /* ── Body ────────────────────────────────────────────────────────────────── */
@@ -96,7 +110,7 @@
 .body {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   min-width: 0;
 }
 
@@ -109,18 +123,14 @@
 .cityName {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 36px;
+  font-size: 32px;
   letter-spacing: -0.025em;
   line-height: 1;
   color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: color 0.15s;
 }
-
-.card:hover .cityName { color: var(--text); }
-.cardTop .cityName { font-size: 42px; }
 
 .countryCode {
   font-family: var(--font-mono);
@@ -131,12 +141,12 @@
   border-radius: 2px;
   padding: 2px 5px;
   flex-shrink: 0;
-  transition: border-color 0.15s, color 0.15s;
+  transition: color 0.12s, border-color 0.12s;
 }
 
 .card:hover .countryCode {
-  border-color: var(--border-mid);
   color: var(--text-muted);
+  border-color: var(--border-mid);
 }
 
 .meta {
@@ -164,16 +174,6 @@
   letter-spacing: 0.04em;
 }
 
-/* ── Right column ────────────────────────────────────────────────────────── */
-
-.right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
 /* ── Density profile ─────────────────────────────────────────────────────── */
 
 .density {
@@ -182,93 +182,77 @@
   gap: 2px;
   height: 28px;
   width: 72px;
+  flex-shrink: 0;
 }
 
 .densityBar {
   flex: 1;
   background: var(--accent);
   border-radius: 1px;
-  transition: opacity 0.2s;
+  opacity: 0.45;
   min-height: 2px;
+  transition: opacity 0.12s;
 }
 
-/* ── Days until ──────────────────────────────────────────────────────────── */
-
-.daysUntil {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: var(--text-dim);
-  text-transform: lowercase;
-  white-space: nowrap;
-}
-
-.daysUrgent {
-  color: var(--accent);
-}
+.card:hover .densityBar { opacity: 0.7; }
 
 /* ── Skeleton ────────────────────────────────────────────────────────────── */
 
 @keyframes shimmer {
-  0%   { opacity: 0.4; }
-  50%  { opacity: 0.7; }
-  100% { opacity: 0.4; }
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.6;  }
+}
+
+.skeletonHeader {
+  height: 18px;
+  width: 120px;
+  background: var(--bg-raised);
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  animation: shimmer 1.6s ease-in-out infinite;
 }
 
 .skeleton {
   display: grid;
-  grid-template-columns: 52px 1fr auto;
+  grid-template-columns: 44px 1fr auto;
   align-items: center;
-  gap: 24px;
-  padding: 24px 0;
+  gap: 20px;
+  padding: 20px 0;
   border-bottom: 1px solid var(--border);
   animation: shimmer 1.6s ease-in-out infinite;
 }
 
 .skeletonRank {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-dim);
+  height: 10px;
+  width: 20px;
+  background: var(--bg-raised);
+  border-radius: var(--radius-sm);
   align-self: start;
-  padding-top: 6px;
+  margin-top: 5px;
 }
 
 .skeletonBody {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .skeletonCity {
-  height: 36px;
+  height: 32px;
   background: var(--bg-raised);
   border-radius: var(--radius-sm);
 }
 
 .skeletonMeta {
   height: 11px;
-  width: 120px;
+  width: 110px;
   background: var(--bg-raised);
   border-radius: var(--radius-sm);
-}
-
-.skeletonRight {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
 }
 
 .skeletonBars {
   width: 72px;
   height: 28px;
-  background: var(--bg-raised);
-  border-radius: var(--radius-sm);
-}
-
-.skeletonDays {
-  width: 48px;
-  height: 10px;
   background: var(--bg-raised);
   border-radius: var(--radius-sm);
 }
