@@ -49,3 +49,34 @@ export interface EventsResponse {
   city: ApiCity
   events: ApiEvent[]
 }
+
+// ── Discovery / Bundles ──────────────────────────────────────────────────────
+
+export interface BundleTopEvent {
+  id:           string
+  title:        string
+  startsAt:     string
+  imageUrl:     string | null
+  timeKnown:    boolean
+  affinityScore: number
+  ticketUrl:    string | null
+  sourceUrl:    string
+  venue:        { name: string }
+}
+
+export interface ApiBundle {
+  city:       ApiCity
+  score:      number
+  eventCount: number
+  topEvents:  BundleTopEvent[]
+}
+
+export interface BundleWeekend {
+  from:    string
+  to:      string
+  bundles: ApiBundle[]
+}
+
+export interface BundlesResponse {
+  weekends: BundleWeekend[]
+}
