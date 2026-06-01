@@ -345,6 +345,8 @@ Affinity scoring is additive across three signal types:
 
 An event's score = sum of matched weights across all three types. Events with no matches score 0.1 and stay visible but rank last within their date group.
 
+These weights are the MVP starting point — intentionally simple. The schema (`weight NUMERIC(3,2)`, `source` column) is designed to support more nuance later: variable weights by source confidence (Spotify saved track vs top artist vs manual follow), recency decay, interaction signals (clicks, ticket link taps), and per-user calibration.
+
 **Co-occurrence recommendations** (e.g. "users who follow X also follow Y") are deferred to v2. They require real user data to be meaningful — don't build until that data exists.
 
 ---

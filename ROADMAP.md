@@ -9,7 +9,7 @@ Agreed feature sequence. Not a strict sprint plan — order reflects dependencie
 - [x] Event scraping — RA, Songkick, GoOut
 - [x] City mode — query events by city + date range
 - [x] Taste profile — follow artists
-- [x] Affinity ranking — events sorted by artist affinity within date groups
+- [x] Affinity ranking — events sorted by artist affinity within date groups (MVP weights: follow = 1.0, baseline = 0.1 — intentionally simple, designed to extend)
 - [x] Auth — Clerk, sign up / sign in
 
 ---
