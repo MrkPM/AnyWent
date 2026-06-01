@@ -21,8 +21,8 @@ function urgencyLabel(days: number): string {
   if (days <= 0)  return 'now'
   if (days === 1) return 'tomorrow'
   if (days < 7)  return `in ${days} days`
-  if (days < 14) return `in ${Math.ceil(days / 7)} week`
-  return `in ${Math.ceil(days / 7)} weeks`
+  const weeks = Math.ceil(days / 7)
+  return `in ${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
 }
 
 // ── Density bars ─────────────────────────────────────────────────────────────
