@@ -3,7 +3,7 @@ import type { ApiArtist, ApiCity, ApiEvent, EventsResponse } from '../types/inde
 // In local dev, VITE_API_URL is unset — requests go to /api and the Vite proxy
 // strips the prefix and forwards to localhost:3000.
 // In production, set VITE_API_URL to the deployed API base URL (e.g. https://api.anywent.com).
-const BASE = import.meta.env.VITE_API_URL ?? '/api'
+const BASE = import.meta.env.VITE_API_URL || '/api'
 
 async function get<T>(path: string, token?: string): Promise<T> {
   const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {}
