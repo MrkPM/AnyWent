@@ -1,0 +1,292 @@
+.page {
+  padding-bottom: 80px;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.header {
+  padding: 48px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 42px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.subheading {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ── List ────────────────────────────────────────────────────────────────── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Card ────────────────────────────────────────────────────────────────── */
+
+.card {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  background: none;
+  border-radius: 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  width: 100%;
+  text-align: left;
+  position: relative;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.card:hover::before { transform: scaleY(1); }
+.card:hover { background: var(--bg-hover); }
+
+.cardTop {
+  padding: 28px 0;
+}
+
+/* ── Rank ────────────────────────────────────────────────────────────────── */
+
+.rank {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  line-height: 1;
+  align-self: start;
+  padding-top: 6px;
+}
+
+.rankTop {
+  color: var(--accent);
+}
+
+/* ── Body ────────────────────────────────────────────────────────────────── */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cityRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.cityName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s;
+}
+
+.card:hover .cityName { color: var(--text); }
+.cardTop .cityName { font-size: 42px; }
+
+.countryCode {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  padding: 2px 5px;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.card:hover .countryCode {
+  border-color: var(--border-mid);
+  color: var(--text-muted);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dateRange {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.dot {
+  color: var(--text-dim);
+  font-size: 10px;
+}
+
+.eventCount {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+/* ── Right column ────────────────────────────────────────────────────────── */
+
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── Density profile ─────────────────────────────────────────────────────── */
+
+.density {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 28px;
+  width: 72px;
+}
+
+.densityBar {
+  flex: 1;
+  background: var(--accent);
+  border-radius: 1px;
+  transition: opacity 0.2s;
+  min-height: 2px;
+}
+
+/* ── Days until ──────────────────────────────────────────────────────────── */
+
+.daysUntil {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.daysUrgent {
+  color: var(--accent);
+}
+
+/* ── Skeleton ────────────────────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0%   { opacity: 0.4; }
+  50%  { opacity: 0.7; }
+  100% { opacity: 0.4; }
+}
+
+.skeleton {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+.skeletonRank {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  align-self: start;
+  padding-top: 6px;
+}
+
+.skeletonBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeletonCity {
+  height: 36px;
+  background: var(--bg-raised);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonMeta {
+  height: 11px;
+  width: 120px;
+  background: var(--bg-raised);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.skeletonBars {
+  width: 72px;
+  height: 28px;
+  background: var(--bg-raised);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonDays {
+  width: 48px;
+  height: 10px;
+  background: var(--bg-raised);
+  border-radius: var(--radius-sm);
+}
+
+/* ── States ──────────────────────────────────────────────────────────────── */
+
+.error {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--red);
+  padding: 32px 0;
+  letter-spacing: 0.02em;
+}
+
+.empty {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 48px 0;
+  letter-spacing: 0.03em;
+}

@@ -1,4 +1,4 @@
-import type { ApiArtist, ApiCity, ApiEvent, EventsResponse } from '../types/index.js'
+import type { ApiArtist, ApiCity, ApiEvent, EventsResponse, WindowsResponse } from '../types/index.js'
 
 // In local dev, VITE_API_URL is unset — requests go to /api and the Vite proxy
 // strips the prefix and forwards to localhost:3000.
@@ -49,6 +49,12 @@ export async function fetchEvents(
 
 export async function fetchEvent(id: string): Promise<ApiEvent> {
   return get<ApiEvent>(`/events/${id}`)
+}
+
+// ── Discovery ────────────────────────────────────────────────────────────────
+
+export async function fetchWindows(token?: string): Promise<WindowsResponse> {
+  return get<WindowsResponse>('/windows?limit=15', token)
 }
 
 // ── Taste ────────────────────────────────────────────────────────────────────
