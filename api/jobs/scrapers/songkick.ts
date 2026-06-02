@@ -29,6 +29,10 @@ export const SONGKICK_LOCALITIES: Record<string, { metroAreaId: number; urlSlug:
   amsterdam: { metroAreaId: 31366, urlSlug: 'netherlands-amsterdam', citySlug: 'amsterdam' },
   berlin:    { metroAreaId: 28443, urlSlug: 'germany-berlin',        citySlug: 'berlin'    },
   prague:    { metroAreaId: 28425, urlSlug: 'czech-republic-prague', citySlug: 'prague'    },
+  // paris: metroAreaId unverified — Songkick blocked server-side lookups 2026-06.
+  //        Candidate ID: 31408 (france-paris). Verify manually before enabling:
+  //        https://www.songkick.com/metro-areas/31408-france-paris
+  // mallorca: not a Songkick metro area — island destination, skip.
 }
 
 const HEADERS = {

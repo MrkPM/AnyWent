@@ -27,6 +27,8 @@ export const RA_AREAS: Record<string, { id: number; citySlug: string }> = {
   berlin:    { id: 34,  citySlug: 'berlin' },
   amsterdam: { id: 29,  citySlug: 'amsterdam' },
   prague:    { id: 451, citySlug: 'prague' },
+  paris:     { id: 44,  citySlug: 'paris' },
+  mallorca:  { id: 661, citySlug: 'mallorca' }, // RA area covers whole island
 }
 
 const HEADERS = {

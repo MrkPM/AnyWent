@@ -1,0 +1,25 @@
+DROP POLICY IF EXISTS "public_read" ON countries;
+DROP POLICY IF EXISTS "public_read" ON regions;
+DROP POLICY IF EXISTS "public_read" ON cities;
+DROP POLICY IF EXISTS "public_read" ON venues;
+DROP POLICY IF EXISTS "public_read" ON artists;
+DROP POLICY IF EXISTS "public_read" ON events;
+DROP POLICY IF EXISTS "public_read" ON event_artists;
+DROP POLICY IF EXISTS "public_read" ON event_windows;
+
+ALTER TABLE countries               DISABLE ROW LEVEL SECURITY;
+ALTER TABLE regions                 DISABLE ROW LEVEL SECURITY;
+ALTER TABLE cities                  DISABLE ROW LEVEL SECURITY;
+ALTER TABLE venues                  DISABLE ROW LEVEL SECURITY;
+ALTER TABLE artists                 DISABLE ROW LEVEL SECURITY;
+ALTER TABLE events                  DISABLE ROW LEVEL SECURITY;
+ALTER TABLE event_artists           DISABLE ROW LEVEL SECURITY;
+ALTER TABLE event_windows           DISABLE ROW LEVEL SECURITY;
+ALTER TABLE users                   DISABLE ROW LEVEL SECURITY;
+ALTER TABLE user_artist_affinities  DISABLE ROW LEVEL SECURITY;
+ALTER TABLE user_artist_affinity    DISABLE ROW LEVEL SECURITY;
+ALTER TABLE user_venue_affinity     DISABLE ROW LEVEL SECURITY;
+ALTER TABLE user_attendance         DISABLE ROW LEVEL SECURITY;
+ALTER TABLE user_connected_accounts DISABLE ROW LEVEL SECURITY;
+ALTER TABLE user_saved_events       DISABLE ROW LEVEL SECURITY;
+ALTER TABLE scraper_runs            DISABLE ROW LEVEL SECURITY;

@@ -18,26 +18,50 @@ It is not a competitor to RA or Songkick. It is a conduit — aggregating, perso
 
 These are the three query modes the product is built around. Each is a distinct mental model and UI pattern. All three will eventually be reflected in the nav.
 
-### Journey 1 — Discovery: "Just tell me where to go"
-> One confident recommendation, ranked by taste. No configuration required.
+---
 
-The most differentiated journey — nothing else does this well. Surface a single "best pick" with visible reasoning: *"7 artists you follow are playing in Berlin this weekend — best window in 6 weeks."* Requires meaningful taste data to work (Spotify import). **V2.**
+### Journey 1 — Recommendation: "Just entertain me"
+> **Output: a city + date range recommendation.** The app decides for you.
+
+User intent: flexible, no constraints, wants the best option surfaced without having to browse. The app answers with a specific recommendation: *"Go to Berlin, 13–17 Jun — 7 artists you follow are playing, best window in 6 weeks."*
+
+The most differentiated journey — nothing else does this. Requires strong taste signal to be trustworthy (Spotify import). **V2.**
+
+---
 
 ### Journey 2 — Calendar: "Show me what's on when and where"
-> Chronological agenda across cities, taste-ranked within each window.
+> **Output: a browsable agenda across cities, ranked by taste.**
 
-Multi-city view across upcoming weekends. User can optionally filter by city. Partially built — the discovery screen (`/discover`) is a first pass at this. Multi-city filter is **V2.**
+User intent: wants to see the landscape — what's happening across cities and when — and make their own decision. Time is the primary axis. Cities are filterable (multi-select). Taste score ranks cities within each time window.
 
-### Journey 3 — City: "I'm going to Berlin 18–21 Jun, what's on?"
-> Single city + date range, ranked by taste.
+Partially built — the `/discover` screen is the foundation. Multi-city filter is **V2.**
 
-Already built (`/` city mode). The most familiar query pattern — closest to RA/Songkick but personalised.
+---
+
+### Journey 3 — City: "I'm going to Berlin, what's on?"
+> **Output: a ranked event list for a fixed city + date range.**
+
+User intent: the city (and often the dates) are already decided — they just want to know what's on and how much they'll like it. Single city, specific date range, events ranked by taste score.
+
+Already built at `/` (city mode). The most familiar query pattern — closest to RA/Songkick but personalised.
+
+---
+
+### Key distinctions
+
+| | Journey 1 | Journey 2 | Journey 3 |
+|---|---|---|---|
+| City | Chosen by app | User browses / filters | Fixed by user |
+| Dates | Chosen by app | User browses | Fixed by user |
+| Output | One recommendation | Browsable agenda | Event list |
+| Constraint | None | None (optional city filter) | City + dates locked |
+| Status | V2 | In progress | Built |
 
 ---
 
 ## Current Status
 
-MVP feature-complete. Discovery UI shipped. Pausing on layout iteration.
+MVP feature-complete. Discovery UI (Journey 2 foundation) shipped.
 
 ---
 
