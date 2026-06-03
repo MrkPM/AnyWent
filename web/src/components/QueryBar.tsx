@@ -13,14 +13,17 @@ interface Query {
 interface Props {
   onSearch: (query: Query) => void
   loading: boolean
+  initialCity?: string
+  initialFrom?: string
+  initialTo?: string
 }
 
-export function QueryBar({ onSearch, loading }: Props) {
+export function QueryBar({ onSearch, loading, initialCity, initialFrom, initialTo }: Props) {
   const [cities, setCities] = useState<ApiCity[]>([])
   const weekend = upcomingWeekend()
-  const [citySlug, setCitySlug] = useState('berlin')
-  const [from, setFrom] = useState(weekend.from)
-  const [to, setTo] = useState(weekend.to)
+  const [citySlug, setCitySlug] = useState(initialCity ?? 'berlin')
+  const [from, setFrom] = useState(initialFrom ?? weekend.from)
+  const [to, setTo] = useState(initialTo ?? weekend.to)
 
   useEffect(() => {
     fetchCities().then(setCities).catch(console.error)

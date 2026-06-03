@@ -61,6 +61,7 @@ export async function spotifyRoutes(app: FastifyInstance) {
       connected: true,
       connectedAt: conn.connected_at.toISOString(),
       lastSyncedAt: conn.last_synced_at?.toISOString() ?? null,
+      displayName: conn.display_name ?? null,
     })
   })
 

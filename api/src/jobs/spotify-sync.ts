@@ -6,7 +6,7 @@ import {
   upsertSpotifyAffinities,
   markSpotifySynced,
 } from '../db/queries/spotify.js'
-import { getFollowedArtists, getTopArtists, refreshAccessToken } from '../lib/spotify.js'
+import { getFollowedArtists, getTopArtists, getProfile, refreshAccessToken } from '../lib/spotify.js'
 
 export async function syncSpotifyForUser(userId: string): Promise<void> {
   const conn = await getSpotifyConnection(userId)
@@ -20,9 +20,10 @@ export async function syncSpotifyForUser(userId: string): Promise<void> {
     accessToken = fresh.accessToken
   }
 
-  const [followed, top] = await Promise.all([
+  const [followed, top, profile] = await Promise.all([
     getFollowedArtists(accessToken),
     getTopArtists(accessToken),
+    getProfile(accessToken),
   ])
 
   // Deduplicate by Spotify ID
@@ -44,7 +45,7 @@ export async function syncSpotifyForUser(userId: string): Promise<void> {
   }
 
   await upsertSpotifyAffinities(userId, artistIds)
-  await markSpotifySynced(userId)
+  await markSpotifySynced(userId, profile.displayName)
 
   console.log(`[spotify-sync] synced ${artistIds.length} artists for user ${userId}`)
 }

@@ -11,6 +11,7 @@ export interface SpotifyStatus {
   connected: boolean
   connectedAt?: string
   lastSyncedAt?: string | null
+  displayName?: string | null
 }
 
 export function useSpotify() {
@@ -18,6 +19,7 @@ export function useSpotify() {
   const isLoaded = useAuthIsLoaded()
   const [status, setStatus] = useState<SpotifyStatus | null>(null)
   const [connecting, setConnecting] = useState(false)
+  const [syncing, setSyncing] = useState(false)
 
   const refresh = useCallback(async () => {
     const token = await getToken()
@@ -54,10 +56,20 @@ export function useSpotify() {
   }
 
   async function sync() {
-    const token = await getToken()
-    if (!token) return
-    await syncSpotify(token)
+    setSyncing(true)
+    try {
+      const token = await getToken()
+      if (!token) return
+      await syncSpotify(token)
+      // Poll status a couple of times to catch when the background job finishes
+      await new Promise(r => setTimeout(r, 2000))
+      await refresh()
+      await new Promise(r => setTimeout(r, 3000))
+      await refresh()
+    } finally {
+      setSyncing(false)
+    }
   }
 
-  return { status, connecting, connect, disconnect, sync, refresh }
+  return { status, connecting, syncing, connect, disconnect, sync, refresh }
 }

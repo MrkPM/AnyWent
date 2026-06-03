@@ -63,7 +63,7 @@ export async function fetchSpotifyConnectUrl(token: string): Promise<{ url: stri
   return get<{ url: string }>('/auth/spotify/connect', token)
 }
 
-export async function fetchSpotifyStatus(token: string): Promise<{ connected: boolean; connectedAt?: string; lastSyncedAt?: string | null }> {
+export async function fetchSpotifyStatus(token: string): Promise<{ connected: boolean; connectedAt?: string; lastSyncedAt?: string | null; displayName?: string | null }> {
   return get('/auth/spotify/status', token)
 }
 

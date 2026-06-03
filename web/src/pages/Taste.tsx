@@ -11,7 +11,7 @@ const DEBOUNCE_MS = 300
 export function Taste() {
   const user = useCurrentUser()
   const { artists: followed, loading, follow, unfollow } = useTaste()
-  const { status: spotifyStatus, connecting, connect: connectSpotify, disconnect: disconnectSpotify, sync: syncSpotify } = useSpotify()
+  const { status: spotifyStatus, connecting, syncing: spotifySyncing, connect: connectSpotify, disconnect: disconnectSpotify, sync: syncSpotify } = useSpotify()
 
   const [query,   setQuery]   = useState('')
   const [results, setResults] = useState<ApiArtist[]>([])
@@ -106,17 +106,23 @@ export function Taste() {
         )}
         {spotifyStatus?.connected && (
           <div className={styles.spotifyConnected}>
-            <span className={styles.spotifyTag}>Connected</span>
-            {spotifyStatus.lastSyncedAt ? (
+            <span className={styles.spotifyTag}>
+              {spotifyStatus.displayName ? `Connected as ${spotifyStatus.displayName}` : 'Connected'}
+            </span>
+            {spotifySyncing ? (
+              <span className={styles.spotifySyncedAt}>Syncing…</span>
+            ) : spotifyStatus.lastSyncedAt ? (
               <span className={styles.spotifySyncedAt}>
                 Synced {new Date(spotifyStatus.lastSyncedAt).toLocaleDateString()}
               </span>
-            ) : (
-              <span className={styles.spotifySyncedAt}>Syncing…</span>
-            )}
+            ) : null}
             <div className={styles.spotifyActions}>
-              <button className={styles.spotifyActionBtn} onClick={() => void syncSpotify()}>
-                Sync now
+              <button
+                className={styles.spotifyActionBtn}
+                onClick={() => void syncSpotify()}
+                disabled={spotifySyncing}
+              >
+                {spotifySyncing ? 'Syncing…' : 'Sync now'}
               </button>
               <button className={styles.spotifyActionBtn} onClick={() => void disconnectSpotify()}>
                 Disconnect

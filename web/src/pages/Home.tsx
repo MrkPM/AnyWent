@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { QueryBar } from '../components/QueryBar.js'
 import { EventCard } from '../components/EventCard.js'
 import { useEvents } from '../hooks/useEvents.js'
@@ -36,16 +37,18 @@ function groupEventsByDate(events: ApiEvent[], activeFrom: string): [string, Api
 export function Home() {
   const { data, loading, error, load } = useEvents()
   const defaultWeekend = useMemo(() => upcomingWeekend(), [])
-  const [activeFrom, setActiveFrom] = useState(defaultWeekend.from)
+  const [searchParams] = useSearchParams()
+
+  const initialCity = searchParams.get('city') ?? DEFAULT_CITY
+  const initialFrom = searchParams.get('from') ?? defaultWeekend.from
+  const initialTo   = searchParams.get('to')   ?? defaultWeekend.to
+
+  const [activeFrom, setActiveFrom] = useState(initialFrom)
 
   const getToken    = useGetToken()
   const getTokenRef = useRef(getToken)
   getTokenRef.current = getToken
 
-  // Events are public — load immediately without waiting for Clerk.
-  // Auth token is fetched non-blockingly via Promise.race with a short timeout
-  // so a slow/uninitialised Clerk never delays the initial render.
-  // If no token is available within the timeout, events load with baseline scoring.
   useEffect(() => {
     const TOKEN_TIMEOUT_MS = 500
     void (async () => {
@@ -53,9 +56,10 @@ export function Home() {
         getTokenRef.current().catch(() => null),
         new Promise<null>(resolve => setTimeout(() => resolve(null), TOKEN_TIMEOUT_MS)),
       ]).then(t => t ?? undefined)
-      load(DEFAULT_CITY, defaultWeekend.from, defaultWeekend.to, token)
+      load(initialCity, initialFrom, initialTo, token)
     })()
-  }, [load, defaultWeekend])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [load])
 
   const grouped = useMemo(
     () => (data ? groupEventsByDate(data.events, activeFrom) : []),
@@ -69,6 +73,9 @@ export function Home() {
       <h1 className={styles.heading}>Where should I go this weekend?</h1>
 
       <QueryBar
+        initialCity={initialCity}
+        initialFrom={initialFrom}
+        initialTo={initialTo}
         onSearch={q => {
           setActiveFrom(q.from)
           void (async () => {

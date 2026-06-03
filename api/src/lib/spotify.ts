@@ -127,6 +127,20 @@ export async function refreshAccessToken(refreshToken: string): Promise<SpotifyT
   return parseTokens(await res.json() as RawTokenResponse, refreshToken)
 }
 
+export interface SpotifyProfile {
+  spotifyId: string
+  displayName: string
+}
+
+export async function getProfile(accessToken: string): Promise<SpotifyProfile> {
+  const res = await fetch(`${API_BASE}/me`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  })
+  if (!res.ok) throw new Error(`Spotify profile fetch failed: ${res.status}`)
+  const data = await res.json() as { id: string; display_name?: string | null }
+  return { spotifyId: data.id, displayName: data.display_name || data.id }
+}
+
 export interface SpotifyArtist {
   spotifyId: string
   name: string

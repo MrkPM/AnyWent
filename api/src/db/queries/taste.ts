@@ -12,7 +12,8 @@ export async function searchArtists(query: string): Promise<ArtistRow[]> {
     SELECT id, name, slug, genres
     FROM   artists
     WHERE  name ILIKE ${'%' + query + '%'}
-    ORDER  BY name ASC
+       OR  similarity(name, ${query}) > 0.3
+    ORDER  BY similarity(name, ${query}) DESC, name ASC
     LIMIT  20
   `
 }

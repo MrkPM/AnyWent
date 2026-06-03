@@ -9,6 +9,7 @@ export interface SpotifyConnectionRow {
   scopes:           string[]
   connected_at:     Date
   last_synced_at:   Date | null
+  display_name:     string | null
 }
 
 export async function upsertSpotifyConnection(userId: string, tokens: SpotifyTokens): Promise<void> {
@@ -38,8 +39,12 @@ export async function deleteSpotifyConnection(userId: string): Promise<void> {
   await sql`DELETE FROM spotify_connections WHERE user_id = ${userId}`
 }
 
-export async function markSpotifySynced(userId: string): Promise<void> {
-  await sql`UPDATE spotify_connections SET last_synced_at = now() WHERE user_id = ${userId}`
+export async function markSpotifySynced(userId: string, displayName: string): Promise<void> {
+  await sql`
+    UPDATE spotify_connections
+    SET last_synced_at = now(), display_name = ${displayName}
+    WHERE user_id = ${userId}
+  `
 }
 
 // Upserts a Spotify artist into the artists table; returns our internal artist UUID.

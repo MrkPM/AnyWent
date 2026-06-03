@@ -276,6 +276,7 @@ Any third-party provider (auth, payments, email, maps, AI) must be wrapped in an
 
 **Applied in AnyWent:**
 - Clerk → `api/src/middleware/auth.ts` + `web/src/hooks/useAuth.ts` only
+- Spotify → `api/src/lib/spotify.ts` only (OAuth, token exchange/refresh, API calls)
 - Any future provider (maps, payments, AI) follows the same pattern
 
 ---
@@ -389,6 +390,14 @@ An event's score = sum of matched weights across all three types. Events with no
 These weights are the MVP starting point — intentionally simple. The schema (`weight NUMERIC(3,2)`, `source` column) is designed to support more nuance later: variable weights by source confidence (Spotify saved track vs top artist vs manual follow), recency decay, interaction signals (clicks, ticket link taps), and per-user calibration.
 
 **Co-occurrence recommendations** (e.g. "users who follow X also follow Y") are deferred to v2. They require real user data to be meaningful — don't build until that data exists.
+
+---
+
+### Schema: user_id is TEXT (Clerk string), not UUID
+
+All per-user tables use `user_id TEXT` — the raw Clerk user ID (e.g. `user_2Nz...`). Do not use UUID for user_id in new tables.
+
+`user_connected_accounts` in migration 001 was designed before this was settled — it has `user_id UUID REFERENCES users(id)` and is **never populated**. It is dead schema. For Spotify OAuth tokens we created `spotify_connections` (migration 013) with `user_id TEXT`. Any future per-user tables follow this TEXT pattern.
 
 ---
 

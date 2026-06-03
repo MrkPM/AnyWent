@@ -12,7 +12,9 @@ Captured product decisions and deferred items. Not a sprint plan — things go h
 
 ## Taste enrichment — V2
 
-- [ ] **Spotify import** — connect Spotify on sign-in, auto-follow artists from liked tracks / top artists. Commercial use confirmed acceptable (Bandsintown precedent). Required for Journey 1 to be meaningful.
+- [x] **Spotify import** — built. OAuth connect flow on Taste page; syncs followed artists + top artists (short/medium/long term) into `user_artist_affinities` with source `'spotify'`. Tokens stored in `spotify_connections` table.
+- [ ] **Spotify — periodic re-sync** — currently syncs on connect and manual trigger only. Add a daily cron (same pattern as `computeWindows`) to refresh all connected users' affinities.
+- [ ] **Spotify — weight differentiation** — followed artists and top artists currently both get weight 1.0. Refine when weight model is revisited: followed = 1.0, top short_term = 0.9, top medium_term = 0.8, top long_term = 0.7.
 - [ ] **SoundCloud import** — Artist Pro API ($99/yr). Self-service registration available. Note: genre data from SoundCloud is unreliable — use for artist matching only, not genre inference.
 - [ ] **YouTube Music import** — Google OAuth, reads liked/saved artists. Third taste source for V2.
 
