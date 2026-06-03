@@ -57,6 +57,24 @@ export async function fetchWindows(token?: string): Promise<WindowsResponse> {
   return get<WindowsResponse>('/windows?limit=15', token)
 }
 
+// ── Spotify ──────────────────────────────────────────────────────────────────
+
+export async function fetchSpotifyConnectUrl(token: string): Promise<{ url: string }> {
+  return get<{ url: string }>('/auth/spotify/connect', token)
+}
+
+export async function fetchSpotifyStatus(token: string): Promise<{ connected: boolean; connectedAt?: string; lastSyncedAt?: string | null }> {
+  return get('/auth/spotify/status', token)
+}
+
+export async function disconnectSpotify(token: string): Promise<void> {
+  return del('/auth/spotify', token)
+}
+
+export async function syncSpotify(token: string): Promise<void> {
+  return post('/auth/spotify/sync', {}, token)
+}
+
 // ── Taste ────────────────────────────────────────────────────────────────────
 
 export async function searchArtists(q: string): Promise<ApiArtist[]> {

@@ -9,8 +9,12 @@ const schema = z.object({
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
   CLERK_SECRET_KEY: z.string(),
+  SPOTIFY_CLIENT_ID: z.string(),
+  SPOTIFY_CLIENT_SECRET: z.string(),
+  SPOTIFY_REDIRECT_URI: z.string(),
+  FRONTEND_URL: z.string().default('http://localhost:5173'),
   SENTRY_DSN: z.string().optional(),
-  CORS_ORIGIN: z.string().optional(), // set to frontend URL in production
+  CORS_ORIGIN: z.string().optional(),
 })
 
 export const env = schema.parse(process.env)

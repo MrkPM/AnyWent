@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { searchArtists } from '../lib/api.js'
 import { useTaste } from '../hooks/useTaste.js'
 import { useCurrentUser, AuthSignInButton } from '../hooks/useAuth.js'
+import { useSpotify } from '../hooks/useSpotify.js'
 import type { ApiArtist } from '../types/index.js'
 import styles from './Taste.module.css'
 
@@ -10,11 +11,25 @@ const DEBOUNCE_MS = 300
 export function Taste() {
   const user = useCurrentUser()
   const { artists: followed, loading, follow, unfollow } = useTaste()
+  const { status: spotifyStatus, connecting, connect: connectSpotify, disconnect: disconnectSpotify, sync: syncSpotify } = useSpotify()
 
   const [query,   setQuery]   = useState('')
   const [results, setResults] = useState<ApiArtist[]>([])
   const [searching, setSearching] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Detect Spotify OAuth callback result in query params and clear them from the URL
+  const [spotifyNotice, setSpotifyNotice] = useState<'connected' | 'error' | null>(null)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const result = params.get('spotify')
+    if (result === 'connected' || result === 'error') {
+      setSpotifyNotice(result)
+      params.delete('spotify')
+      const clean = params.toString() ? `?${params.toString()}` : window.location.pathname
+      window.history.replaceState(null, '', clean)
+    }
+  }, [])
 
   // Set of followed artist IDs for fast lookup
   const followedIds = new Set(followed.map(a => a.id))
@@ -64,6 +79,52 @@ export function Taste() {
       <p className={styles.subheading}>
         Follow artists to rank events by affinity. Events with artists you follow surface first.
       </p>
+
+      {/* Spotify */}
+      <div className={styles.spotifySection}>
+        <span className={styles.sectionLabel}>Spotify</span>
+        {spotifyNotice === 'connected' && (
+          <p className={styles.spotifyNotice}>Connected. Importing your artists in the background.</p>
+        )}
+        {spotifyNotice === 'error' && (
+          <p className={styles.spotifyNoticeError}>Connection failed. Try again.</p>
+        )}
+        {spotifyStatus === null && null}
+        {spotifyStatus && !spotifyStatus.connected && (
+          <div className={styles.spotifyConnect}>
+            <p className={styles.spotifyHint}>
+              Import artists you follow and your top plays to auto-populate your taste profile.
+            </p>
+            <button
+              className={styles.spotifyBtn}
+              onClick={() => void connectSpotify()}
+              disabled={connecting}
+            >
+              {connecting ? 'Redirecting…' : 'Connect Spotify'}
+            </button>
+          </div>
+        )}
+        {spotifyStatus?.connected && (
+          <div className={styles.spotifyConnected}>
+            <span className={styles.spotifyTag}>Connected</span>
+            {spotifyStatus.lastSyncedAt ? (
+              <span className={styles.spotifySyncedAt}>
+                Synced {new Date(spotifyStatus.lastSyncedAt).toLocaleDateString()}
+              </span>
+            ) : (
+              <span className={styles.spotifySyncedAt}>Syncing…</span>
+            )}
+            <div className={styles.spotifyActions}>
+              <button className={styles.spotifyActionBtn} onClick={() => void syncSpotify()}>
+                Sync now
+              </button>
+              <button className={styles.spotifyActionBtn} onClick={() => void disconnectSpotify()}>
+                Disconnect
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Search */}
       <div className={styles.searchSection}>

@@ -57,6 +57,106 @@
   margin-bottom: 10px;
 }
 
+/* ── Spotify ───────────────────────────────────────────────────── */
+
+.spotifySection {
+  margin-bottom: 40px;
+}
+
+.spotifyHint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.spotifyBtn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1db954;
+  background: none;
+  border: 1px solid rgba(29, 185, 84, 0.35);
+  border-radius: var(--radius);
+  padding: 10px 20px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.spotifyBtn:hover:not(:disabled) {
+  background: rgba(29, 185, 84, 0.08);
+  border-color: #1db954;
+}
+
+.spotifyBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.spotifyConnect { }
+
+.spotifyConnected {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.spotifyTag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1db954;
+}
+
+.spotifySyncedAt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.spotifyActions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.spotifyActionBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.spotifyActionBtn:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+
+.spotifyNotice {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #1db954;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
+.spotifyNoticeError {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--red);
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
 /* ── Search ────────────────────────────────────────────────────── */
 
 .searchSection {
