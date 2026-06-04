@@ -18,6 +18,12 @@ Captured product decisions and deferred items. Not a sprint plan — things go h
 - [ ] **SoundCloud import** — Artist Pro API ($99/yr). Self-service registration available. Note: genre data from SoundCloud is unreliable — use for artist matching only, not genre inference.
 - [ ] **YouTube Music import** — Google OAuth, reads liked/saved artists. Third taste source for V2.
 
+## Event data quality
+
+- [x] **Multi-source enrichment** — built. Duplicate events (same artist, same day, same city) are deduplicated at query time; lower-priority sources contribute their badge, ticket_url, and image_url to the canonical card. Works in both city view and event detail.
+- [x] **Fuzzy artist search** — built. `pg_trgm` extension + GIN index on `artists.name`. Handles typos and near-matches.
+- [ ] **Scraper artist linking audit** — the RA Kaytranada event had no `event_artists` row (data was silently dropped during scrape). Worth adding a scraper-run check that flags events with zero linked artists as warnings in `scraper_runs`.
+
 ## Ranking — V2
 
 - [ ] **Venue following** — `user_venue_affinities` table, venue search on Taste page. Weight: 0.6.

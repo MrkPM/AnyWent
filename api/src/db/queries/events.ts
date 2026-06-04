@@ -136,6 +136,34 @@ export async function getEventsByCity(
 
 export async function getEventById(id: string): Promise<EventRow | null> {
   const rows = await sql<EventRow[]>`
+    WITH source_priority AS (
+      SELECT id,
+        CASE source WHEN 'ra' THEN 1 WHEN 'dice' THEN 2 WHEN 'songkick' THEN 3 ELSE 4 END AS priority
+      FROM events
+    ),
+    -- Find duplicates of this specific event (same artist, same day, same city, lower priority)
+    dup_enrichment AS (
+      SELECT
+        jsonb_agg(
+          jsonb_build_object('source', e_d.source, 'sourceUrl', e_d.source_url, 'ticketUrl', e_d.ticket_url)
+          ORDER BY sp_d.priority
+        )                                                               AS dup_sources,
+        MIN(e_d.ticket_url) FILTER (WHERE e_d.ticket_url IS NOT NULL)  AS dup_ticket_url,
+        MIN(e_d.image_url)  FILTER (WHERE e_d.image_url  IS NOT NULL)  AS dup_image_url
+      FROM   event_artists ea_this
+      JOIN   event_artists ea_dup   ON  ea_dup.artist_id = ea_this.artist_id
+                                    AND ea_dup.event_id  != ea_this.event_id
+      JOIN   events  e_this         ON  e_this.id  = ea_this.event_id
+      JOIN   events  e_d            ON  e_d.id     = ea_dup.event_id
+      JOIN   venues  v_this         ON  v_this.id  = e_this.venue_id
+      JOIN   venues  v_d            ON  v_d.id     = e_d.venue_id
+      JOIN   source_priority sp_this ON sp_this.id = ea_this.event_id
+      JOIN   source_priority sp_d    ON sp_d.id    = ea_dup.event_id
+      WHERE  ea_this.event_id = ${id}
+        AND  v_d.city_id      = v_this.city_id
+        AND  DATE(e_d.starts_at) = DATE(e_this.starts_at)
+        AND  sp_d.priority > sp_this.priority
+    )
     SELECT
       e.id,
       e.title,
@@ -144,8 +172,8 @@ export async function getEventById(id: string): Promise<EventRow | null> {
       e.ends_at,
       e.source,
       e.source_url,
-      e.ticket_url,
-      e.image_url,
+      COALESCE(e.ticket_url, de.dup_ticket_url) AS ticket_url,
+      COALESCE(e.image_url,  de.dup_image_url)  AS image_url,
       e.time_known,
       0.1::numeric AS affinity_score,
       v.id   AS venue_id,
@@ -162,13 +190,17 @@ export async function getEventById(id: string): Promise<EventRow | null> {
           ) ORDER BY ea.order NULLS LAST
         ) FILTER (WHERE a.id IS NOT NULL),
         '[]'
-      ) AS artists
+      ) AS artists,
+      jsonb_build_array(
+        jsonb_build_object('source', e.source, 'sourceUrl', e.source_url, 'ticketUrl', e.ticket_url)
+      ) || COALESCE(de.dup_sources, '[]'::jsonb) AS sources
     FROM       events e
     JOIN       venues v         ON v.id        = e.venue_id
     LEFT JOIN  event_artists ea ON ea.event_id = e.id
     LEFT JOIN  artists a        ON a.id        = ea.artist_id
+    LEFT JOIN  dup_enrichment de ON true
     WHERE e.id = ${id}
-    GROUP BY e.id, v.id
+    GROUP BY e.id, v.id, de.dup_sources, de.dup_ticket_url, de.dup_image_url
     LIMIT 1
   `
   return rows[0] ?? null

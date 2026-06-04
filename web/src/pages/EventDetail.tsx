@@ -109,17 +109,7 @@ export function EventDetail() {
 
       {/* Actions */}
       <div className={styles.actions}>
-        {event.ticketUrl && (
-          <a
-            href={event.ticketUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.ticketBtn}
-          >
-            Get Tickets ↗
-          </a>
-        )}
-        <SourceAttribution source={event.source} sourceUrl={event.sourceUrl} />
+        <SourceAttribution sources={event.sources} />
       </div>
     </div>
   )

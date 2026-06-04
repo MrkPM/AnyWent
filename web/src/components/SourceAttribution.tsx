@@ -1,3 +1,4 @@
+import type { ApiEventSource } from '../types/index.js'
 import styles from './SourceAttribution.module.css'
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -10,19 +11,23 @@ const SOURCE_LABELS: Record<string, string> = {
 }
 
 interface Props {
-  source: string
-  sourceUrl: string
+  sources: ApiEventSource[]
 }
 
-export function SourceAttribution({ source, sourceUrl }: Props) {
+export function SourceAttribution({ sources }: Props) {
   return (
-    <a
-      href={sourceUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={styles.attribution}
-    >
-      Via {SOURCE_LABELS[source] ?? source} ↗
-    </a>
+    <>
+      {sources.map(s => (
+        <a
+          key={s.source}
+          href={s.ticketUrl ?? s.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.attribution}
+        >
+          {s.ticketUrl ? 'Tickets via' : 'Via'} {SOURCE_LABELS[s.source] ?? s.source} ↗
+        </a>
+      ))}
+    </>
   )
 }
