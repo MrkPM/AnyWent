@@ -108,6 +108,20 @@ Do not build these in MVP. Flag them and defer:
 
 ---
 
+## Scraper Conventions
+
+Every new scraper must be evaluated against the multi-source enrichment system before merging:
+
+1. **Priority rank** — assign a priority in the `CASE source WHEN ...` block in `api/src/db/queries/events.ts`. Current order: RA (1) > Dice (2) > Songkick (3) > others (4). Lower number = canonical source when duplicates exist.
+2. **Field coverage** — document which fields this source reliably populates vs. leaves null (`ticket_url`, `image_url`, precise `starts_at`, `time_known`). Fields from lower-priority duplicates are automatically enriched onto the canonical event at query time.
+3. **Schema constraint** — if the source name is new, add it to the `source` CHECK constraint in a new migration before writing any data.
+4. **Badge label** — add the source to `SOURCE_LABELS` in `web/src/components/EventCard.tsx` so its badge renders correctly.
+5. **Image rule** — capture `image_url` from day one (see `rule_event_images.md` in memory). Never retrofit.
+
+The enrichment logic lives entirely in `getEventsByCity` in `api/src/db/queries/events.ts` — no scraper changes are needed to participate in deduplication and enrichment.
+
+---
+
 ## Git Workflow
 
 - **Branch strategy**: commit directly to `main` for now — no feature branches until the team grows or a reason emerges

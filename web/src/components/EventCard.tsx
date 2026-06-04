@@ -7,9 +7,9 @@ const SOURCE_LABELS: Record<string, string> = {
   ra: 'RA', songkick: 'Songkick', goout: 'GoOut', dice: 'Dice', email: 'Newsletter', manual: 'AnyWent',
 }
 
-interface Props { event: ApiEvent }
+interface Props { event: ApiEvent; debug?: boolean }
 
-export function EventCard({ event }: Props) {
+export function EventCard({ event, debug }: Props) {
   const headliner = event.artists.find(a => a.role === 'headliner') ?? event.artists[0]
   const supporting = event.artists.filter(a => a !== headliner)
 
@@ -43,24 +43,25 @@ export function EventCard({ event }: Props) {
       </div>
 
       <div className={styles.right}>
+        {debug && (
+          <span className={styles.score} title="affinity score">
+            {event.affinityScore.toFixed(2)}
+          </span>
+        )}
         <span className={styles.datetime}>
           {event.timeKnown ? formatTime(event.startsAt) : '–'}
         </span>
-        {event.ticketUrl ? (
-          <button
-            className={styles.tickets}
-            onClick={e => { e.preventDefault(); e.stopPropagation(); window.open(event.ticketUrl!, '_blank', 'noopener,noreferrer') }}
-          >
-            Tickets ↗
-          </button>
-        ) : (
-          <button
-            className={styles.source}
-            onClick={e => { e.preventDefault(); e.stopPropagation(); window.open(event.sourceUrl, '_blank', 'noopener,noreferrer') }}
-          >
-            {SOURCE_LABELS[event.source] ?? event.source} ↗
-          </button>
-        )}
+        <div className={styles.sourceList}>
+          {event.sources.map(s => (
+            <button
+              key={s.source}
+              className={styles.source}
+              onClick={e => { e.preventDefault(); e.stopPropagation(); window.open(s.ticketUrl ?? s.sourceUrl, '_blank', 'noopener,noreferrer') }}
+            >
+              {SOURCE_LABELS[s.source] ?? s.source} ↗
+            </button>
+          ))}
+        </div>
       </div>
     </Link>
   )

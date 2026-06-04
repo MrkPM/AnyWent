@@ -29,6 +29,12 @@ export interface ApiVenue {
   type: string
 }
 
+export interface ApiEventSource {
+  source: string
+  sourceUrl: string
+  ticketUrl: string | null
+}
+
 export interface ApiEvent {
   id: string
   title: string
@@ -43,6 +49,7 @@ export interface ApiEvent {
   affinityScore: number
   venue: ApiVenue
   artists: ApiEventArtist[]
+  sources: ApiEventSource[]
 }
 
 export interface EventsResponse {

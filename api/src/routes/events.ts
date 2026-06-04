@@ -24,6 +24,7 @@ function toApiEvent(row: EventRow) {
       type: row.venue_type,
     },
     artists: row.artists,
+    sources: row.sources ?? [{ source: row.source, sourceUrl: row.source_url, ticketUrl: row.ticket_url }],
   }
 }
 
