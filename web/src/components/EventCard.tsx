@@ -7,9 +7,9 @@ const SOURCE_LABELS: Record<string, string> = {
   ra: 'RA', songkick: 'Songkick', goout: 'GoOut', dice: 'Dice', email: 'Newsletter', manual: 'AnyWent',
 }
 
-interface Props { event: ApiEvent; debug?: boolean }
+interface Props { event: ApiEvent }
 
-export function EventCard({ event, debug }: Props) {
+export function EventCard({ event }: Props) {
   const headliner = event.artists.find(a => a.role === 'headliner') ?? event.artists[0]
   const supporting = event.artists.filter(a => a !== headliner)
 
@@ -43,9 +43,13 @@ export function EventCard({ event, debug }: Props) {
       </div>
 
       <div className={styles.right}>
-        {debug && (
-          <span className={styles.score} title="affinity score">
-            {event.affinityScore.toFixed(2)}
+        <span className={styles.score} title="affinity score">
+          {event.affinityScore.toFixed(2)}
+        </span>
+        {event.matchedArtists.length > 0 && (
+          <span className={styles.matchedArtists} title="matched artists">
+            {event.matchedArtists.slice(0, 2).join(' · ')}
+            {event.matchedArtists.length > 2 && ` +${event.matchedArtists.length - 2}`}
           </span>
         )}
         <span className={styles.datetime}>
@@ -53,13 +57,9 @@ export function EventCard({ event, debug }: Props) {
         </span>
         <div className={styles.sourceList}>
           {event.sources.map(s => (
-            <button
-              key={s.source}
-              className={styles.source}
-              onClick={e => { e.preventDefault(); e.stopPropagation(); window.open(s.ticketUrl ?? s.sourceUrl, '_blank', 'noopener,noreferrer') }}
-            >
-              {SOURCE_LABELS[s.source] ?? s.source} ↗
-            </button>
+            <span key={s.source} className={styles.source}>
+              {SOURCE_LABELS[s.source] ?? s.source}
+            </span>
           ))}
         </div>
       </div>

@@ -40,7 +40,7 @@ export function QueryBar({ onSearch, loading, initialCity, initialFrom, initialT
         <span className={styles.label}>City</span>
         <select
           value={citySlug}
-          onChange={e => setCitySlug(e.target.value)}
+          onChange={e => { setCitySlug(e.target.value); onSearch({ citySlug: e.target.value, from, to }) }}
           className={styles.select}
         >
           {cities.length === 0 && <option value="berlin">Berlin</option>}
@@ -55,7 +55,12 @@ export function QueryBar({ onSearch, loading, initialCity, initialFrom, initialT
         <input
           type="date"
           value={from}
-          onChange={e => setFrom(e.target.value)}
+          max={to}
+          onChange={e => {
+            const val = e.target.value
+            setFrom(val)
+            if (val > to) setTo(val)
+          }}
           className={styles.input}
         />
       </div>
@@ -65,7 +70,12 @@ export function QueryBar({ onSearch, loading, initialCity, initialFrom, initialT
         <input
           type="date"
           value={to}
-          onChange={e => setTo(e.target.value)}
+          min={from}
+          onChange={e => {
+            const val = e.target.value
+            setTo(val)
+            if (val < from) setFrom(val)
+          }}
           className={styles.input}
         />
       </div>

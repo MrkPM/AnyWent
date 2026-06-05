@@ -42,8 +42,6 @@ export function Home() {
   const initialCity = searchParams.get('city') ?? DEFAULT_CITY
   const initialFrom = searchParams.get('from') ?? defaultWeekend.from
   const initialTo   = searchParams.get('to')   ?? defaultWeekend.to
-  const debug       = searchParams.get('debug') === '1'
-
   const [activeFrom, setActiveFrom] = useState(initialFrom)
 
   const getToken    = useGetToken()
@@ -107,7 +105,7 @@ export function Home() {
                 {day === ONGOING_KEY ? 'Currently showing' : formatGroupDate(day)}
               </h2>
               {events.map(event => (
-                <EventCard key={event.id} event={event} debug={debug} />
+                <EventCard key={event.id} event={event} />
               ))}
             </div>
           ))}

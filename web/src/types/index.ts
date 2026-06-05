@@ -46,7 +46,8 @@ export interface ApiEvent {
   ticketUrl: string | null
   imageUrl:      string | null
   timeKnown:     boolean
-  affinityScore: number
+  affinityScore:  number
+  matchedArtists: string[]
   venue: ApiVenue
   artists: ApiEventArtist[]
   sources: ApiEventSource[]

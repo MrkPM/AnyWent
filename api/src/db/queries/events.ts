@@ -11,8 +11,9 @@ export interface EventRow {
   ticket_url:     string | null
   image_url:      string | null
   time_known:     boolean
-  affinity_score: number
-  venue_id:       string
+  affinity_score:   number
+  matched_artists:  string[]
+  venue_id:         string
   venue_name:     string
   venue_slug:     string
   venue_type:     string
@@ -100,6 +101,10 @@ export async function getEventsByCity(
       COALESCE(e.image_url,  de.dup_image_url)   AS image_url,
       e.time_known,
       GREATEST(COALESCE(SUM(ua.weight), 0), 0.1) AS affinity_score,
+      COALESCE(
+        json_agg(a.name ORDER BY ua.weight DESC NULLS LAST) FILTER (WHERE ua.artist_id IS NOT NULL),
+        '[]'
+      ) AS matched_artists,
       v.id   AS venue_id,
       v.name AS venue_name,
       v.slug AS venue_slug,

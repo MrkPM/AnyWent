@@ -50,7 +50,7 @@ export function buildAuthorizationUrl(userId: string): string {
     scope: SCOPES,
     redirect_uri: env.SPOTIFY_REDIRECT_URI,
     state,
-    show_dialog: 'false',
+    show_dialog: 'true',
   })
   return `${AUTHORIZE_URL}?${params}`
 }
@@ -157,7 +157,7 @@ interface RawArtist {
 
 function parseArtist(a: RawArtist): SpotifyArtist {
   const best = a.images.sort((x, y) => (y.width ?? 0) - (x.width ?? 0))[0]
-  return { spotifyId: a.id, name: a.name, genres: a.genres, imageUrl: best?.url ?? null }
+  return { spotifyId: a.id, name: a.name, genres: a.genres ?? [], imageUrl: best?.url ?? null }
 }
 
 export async function getFollowedArtists(accessToken: string): Promise<SpotifyArtist[]> {
@@ -180,7 +180,7 @@ export async function getTopArtists(accessToken: string): Promise<SpotifyArtist[
     const res = await fetch(`${API_BASE}/me/top/artists?limit=50&time_range=${range}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
-    if (!res.ok) continue
+    if (!res.ok) { console.warn(`[spotify] top artists (${range}) failed: ${res.status}`); continue }
     const data = await res.json() as { items: RawArtist[] }
     for (const a of data.items) {
       if (!seen.has(a.id)) { seen.add(a.id); artists.push(parseArtist(a)) }

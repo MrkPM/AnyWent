@@ -16,7 +16,8 @@ function toApiEvent(row: EventRow) {
     ticketUrl: row.ticket_url,
     imageUrl:      row.image_url,
     timeKnown:     row.time_known,
-    affinityScore: Number(row.affinity_score),
+    affinityScore:   Number(row.affinity_score),
+    matchedArtists:  row.matched_artists ?? [],
     venue: {
       id: row.venue_id,
       name: row.venue_name,

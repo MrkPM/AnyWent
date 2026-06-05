@@ -20,8 +20,13 @@ export async function syncSpotifyForUser(userId: string): Promise<void> {
     accessToken = fresh.accessToken
   }
 
+  // getFollowedArtists requires Extended Quota Mode on Spotify's side (restricted Nov 2024).
+  // Fail gracefully so top artists still sync.
   const [followed, top, profile] = await Promise.all([
-    getFollowedArtists(accessToken),
+    getFollowedArtists(accessToken).catch(err => {
+      console.warn('[spotify-sync] followed artists unavailable (likely needs Extended Quota Mode):', err.message)
+      return [] as Awaited<ReturnType<typeof getFollowedArtists>>
+    }),
     getTopArtists(accessToken),
     getProfile(accessToken),
   ])
