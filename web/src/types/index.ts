@@ -79,6 +79,22 @@ export interface ApiBundle {
   topEvents:  BundleTopEvent[]
 }
 
+// ── Clusters ─────────────────────────────────────────────────────────────────
+
+export interface ApiCluster {
+  city:              ApiCity & { country: string }
+  from:              string
+  to:                string
+  clusterScore:      number
+  eventCount:        number
+  matchedEventCount: number
+  topEvents:         BundleTopEvent[]
+}
+
+export interface ClustersResponse {
+  clusters: ApiCluster[]
+}
+
 export interface BundleWeekend {
   from:    string
   to:      string

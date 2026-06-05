@@ -6,6 +6,7 @@ import { tasteRoutes } from './taste.js'
 import { bundleRoutes } from './bundles.js'
 import { windowRoutes } from './windows.js'
 import { spotifyRoutes } from './spotify.js'
+import { clusterRoutes } from './clusters.js'
 
 export async function registerRoutes(app: FastifyInstance) {
   await app.register(healthRoutes)
@@ -15,4 +16,5 @@ export async function registerRoutes(app: FastifyInstance) {
   await app.register(bundleRoutes)
   await app.register(windowRoutes)
   await app.register(spotifyRoutes)
+  await app.register(clusterRoutes)
 }

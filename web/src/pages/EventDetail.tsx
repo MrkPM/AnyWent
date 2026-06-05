@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { fetchEvent } from '../lib/api.js'
+import { fetchEvent, fetchMyArtists, followArtist, unfollowArtist } from '../lib/api.js'
+import { useGetToken } from '../hooks/useAuth.js'
 import { SourceAttribution } from '../components/SourceAttribution.js'
 import { formatDate, formatTime } from '../lib/dates.js'
 import type { ApiEvent } from '../types/index.js'
@@ -34,13 +35,44 @@ function formatDateRange(startsAt: string, endsAt: string | null): string {
 
 export function EventDetail() {
   const { id } = useParams<{ id: string }>()
-  const [event, setEvent] = useState<ApiEvent | null>(null)
-  const [error, setError]   = useState<string | null>(null)
+  const [event, setEvent]         = useState<ApiEvent | null>(null)
+  const [error, setError]         = useState<string | null>(null)
+  const [followedIds, setFollowedIds] = useState<Set<string>>(new Set())
+  const [authToken, setAuthToken] = useState<string | null>(null)
+  const getToken    = useGetToken()
+  const getTokenRef = useRef(getToken)
+  getTokenRef.current = getToken
 
   useEffect(() => {
     if (!id) return
     fetchEvent(id).then(setEvent).catch(err => setError(err.message))
   }, [id])
+
+  useEffect(() => {
+    void getTokenRef.current().catch(() => null).then(t => {
+      if (!t) return
+      setAuthToken(t)
+      fetchMyArtists(t)
+        .then(artists => setFollowedIds(new Set(artists.map(a => a.id))))
+        .catch(console.error)
+    })
+  }, [])
+
+  function handleFollow(artistId: string) {
+    if (!authToken) return
+    setFollowedIds(prev => new Set([...prev, artistId]))
+    followArtist(artistId, authToken).catch(() =>
+      setFollowedIds(prev => { const s = new Set(prev); s.delete(artistId); return s })
+    )
+  }
+
+  function handleUnfollow(artistId: string) {
+    if (!authToken) return
+    setFollowedIds(prev => { const s = new Set(prev); s.delete(artistId); return s })
+    unfollowArtist(artistId, authToken).catch(() =>
+      setFollowedIds(prev => new Set([...prev, artistId]))
+    )
+  }
 
   if (error) return <p className={styles.error}>{error}</p>
   if (!event) return <p className={styles.loading}>Loading…</p>
@@ -93,14 +125,28 @@ export function EventDetail() {
           <ul className={styles.artists}>
             {headliner && (
               <li className={styles.artist}>
-                <span className={styles.artistName}>{headliner.name}</span>
-                <span className={styles.role}>Headliner</span>
+                <div className={styles.artistLeft}>
+                  <span className={styles.artistName}>{headliner.name}</span>
+                  <span className={styles.role}>Headliner</span>
+                </div>
+                {authToken && (
+                  followedIds.has(headliner.id)
+                    ? <button className={styles.followingBtn} onClick={() => handleUnfollow(headliner.id)}>Following</button>
+                    : <button className={styles.followBtn} onClick={() => handleFollow(headliner.id)}>+ Follow</button>
+                )}
               </li>
             )}
             {supporting.map(a => (
               <li key={a.id} className={styles.artist}>
-                <span className={styles.artistName}>{a.name}</span>
-                {a.role && <span className={styles.role}>{a.role}</span>}
+                <div className={styles.artistLeft}>
+                  <span className={styles.artistName}>{a.name}</span>
+                  {a.role && <span className={styles.role}>{a.role}</span>}
+                </div>
+                {authToken && (
+                  followedIds.has(a.id)
+                    ? <button className={styles.followingBtn} onClick={() => handleUnfollow(a.id)}>Following</button>
+                    : <button className={styles.followBtn} onClick={() => handleFollow(a.id)}>+ Follow</button>
+                )}
               </li>
             ))}
           </ul>

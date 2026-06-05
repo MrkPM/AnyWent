@@ -103,8 +103,16 @@
 
 .artist {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.artistLeft {
+  display: flex;
   align-items: baseline;
   gap: 12px;
+  min-width: 0;
 }
 
 .artistName {
@@ -120,6 +128,46 @@
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.followBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  padding: 4px 10px;
+  border: 1px solid rgba(212, 168, 67, 0.35);
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.followBtn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+.followingBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.followingBtn:hover {
+  color: var(--red, #c0392b);
+  border-color: var(--red, #c0392b);
 }
 
 /* Actions */

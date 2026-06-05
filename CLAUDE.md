@@ -108,6 +108,20 @@ Do not build these in MVP. Flag them and defer:
 
 ---
 
+## Adding a New City
+
+Every new city must be set up in this exact order (FK chain: countries → regions → cities):
+
+1. **Country** — insert into `countries (name, code)` if not already present (ISO 3166-1 alpha-2 code)
+2. **Region** — insert into `regions (name, slug, country_id)`
+3. **City** — insert into `cities (name, slug, region_id, lat, lng, ...)`
+4. **Scraper** — add the city to the relevant scraper configs (RA area ID, Songkick metro ID, GoOut locality, etc.)
+5. **Source constraint** — if adding a new scraper source for this city, add it to the `source` CHECK constraint in a new migration before writing any data
+
+Deletions must go in reverse order. Always use a migration file — never insert city geography directly in the scraper.
+
+---
+
 ## Scraper Conventions
 
 Every new scraper must be evaluated against the multi-source enrichment system before merging:
