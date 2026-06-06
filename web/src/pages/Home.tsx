@@ -37,7 +37,7 @@ function groupEventsByDate(events: ApiEvent[], activeFrom: string): [string, Api
 export function Home() {
   const { data, loading, error, load } = useEvents()
   const defaultWeekend = useMemo(() => upcomingWeekend(), [])
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const initialCity = searchParams.get('city') ?? DEFAULT_CITY
   const initialFrom = searchParams.get('from') ?? defaultWeekend.from
@@ -77,6 +77,7 @@ export function Home() {
         initialTo={initialTo}
         onSearch={q => {
           setActiveFrom(q.from)
+          setSearchParams({ city: q.citySlug, from: q.from, to: q.to })
           void (async () => {
             const token = await getTokenRef.current().catch(() => null).then(t => t ?? undefined)
             load(q.citySlug, q.from, q.to, token)
