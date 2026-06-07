@@ -22,6 +22,8 @@ function signState(payload: string): string {
   return `${payload}.${sig}`
 }
 
+const STATE_TTL_SECONDS = 600 // 10 minutes
+
 function verifyState(state: string): string | null {
   const dot = state.lastIndexOf('.')
   if (dot === -1) return null
@@ -36,12 +38,18 @@ function verifyState(state: string): string | null {
   } catch {
     return null
   }
+  try {
+    const data = JSON.parse(Buffer.from(payload, 'base64url').toString()) as { iat?: number }
+    if (!data.iat || Math.floor(Date.now() / 1000) - data.iat > STATE_TTL_SECONDS) return null
+  } catch {
+    return null
+  }
   return payload
 }
 
 export function buildAuthorizationUrl(userId: string): string {
   const payload = Buffer.from(
-    JSON.stringify({ userId, nonce: crypto.randomBytes(8).toString('hex') }),
+    JSON.stringify({ userId, nonce: crypto.randomBytes(8).toString('hex'), iat: Math.floor(Date.now() / 1000) }),
   ).toString('base64url')
   const state = signState(payload)
   const params = new URLSearchParams({

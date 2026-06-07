@@ -33,6 +33,29 @@ export async function getClustersByDateRange(
       FROM   user_artist_affinities
       WHERE  user_id = ${userId}
     ),
+    source_priority AS (
+      SELECT id,
+        CASE source WHEN 'ra' THEN 1 WHEN 'dice' THEN 2 WHEN 'songkick' THEN 3 ELSE 4 END AS priority
+      FROM events
+    ),
+    duplicate_pairs AS (
+      SELECT DISTINCT ea_high.event_id AS canonical_id, ea_low.event_id AS duplicate_id
+      FROM   event_artists ea_high
+      JOIN   event_artists ea_low    ON  ea_low.artist_id  = ea_high.artist_id
+                                     AND ea_low.event_id   != ea_high.event_id
+      JOIN   events  e_high          ON  e_high.id  = ea_high.event_id
+      JOIN   events  e_low           ON  e_low.id   = ea_low.event_id
+      JOIN   venues  v_high          ON  v_high.id  = e_high.venue_id
+      JOIN   venues  v_low           ON  v_low.id   = e_low.venue_id
+      JOIN   source_priority sp_high ON  sp_high.id = ea_high.event_id
+      JOIN   source_priority sp_low  ON  sp_low.id  = ea_low.event_id
+      WHERE  v_high.city_id = v_low.city_id
+        AND  DATE(e_high.starts_at) = DATE(e_low.starts_at)
+        AND  sp_high.priority < sp_low.priority
+    ),
+    hidden_events AS (
+      SELECT DISTINCT duplicate_id AS id FROM duplicate_pairs
+    ),
     event_scores AS (
       SELECT
         e.id,
@@ -53,6 +76,7 @@ export async function getClustersByDateRange(
       LEFT JOIN user_affinities ua ON ua.artist_id = ea.artist_id
       WHERE  e.starts_at <  ${to}::timestamptz + interval '1 day'
         AND  COALESCE(e.ends_at, e.starts_at) >= ${from}::timestamptz
+        AND  e.id NOT IN (SELECT id FROM hidden_events)
       GROUP BY e.id, v.id
     ),
     cluster_stats AS (

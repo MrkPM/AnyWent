@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { authenticateOptional } from '../middleware/auth.js'
 import { computeWindows } from '../jobs/computeWindows.js'
 import { sql } from '../db/client.js'
+import { env } from '../config/env.js'
 
 // ── DB query ─────────────────────────────────────────────────────────────────
 
@@ -116,18 +117,14 @@ export async function windowRoutes(app: FastifyInstance) {
     },
   )
 
-  // POST /admin/recompute-windows — dev-only manual trigger
-  app.post(
-    '/admin/recompute-windows',
-    { preHandler: authenticateOptional },
-    async (req, reply) => {
-      if (process.env.NODE_ENV === 'production') {
-        return reply.status(403).send({ error: 'Not available in production' })
-      }
-      console.log('[admin] manual window recompute triggered')
-      // Run async — don't await, respond immediately
-      computeWindows().catch(err => console.error('[admin] recompute failed', err))
-      return reply.send({ status: 'recompute started' })
-    },
-  )
+  // POST /admin/recompute-windows — requires Authorization: Bearer <ADMIN_SECRET>
+  app.post('/admin/recompute-windows', async (req, reply) => {
+    const auth = req.headers.authorization
+    if (!auth || auth !== `Bearer ${env.ADMIN_SECRET}`) {
+      return reply.status(401).send({ error: 'Unauthorized' })
+    }
+    console.log('[admin] manual window recompute triggered')
+    computeWindows().catch(err => console.error('[admin] recompute failed', err))
+    return reply.send({ status: 'recompute started' })
+  })
 }

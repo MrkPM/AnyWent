@@ -26,7 +26,7 @@ export async function upsertSpotifyConnection(userId: string, tokens: SpotifyTok
 
 export async function getSpotifyConnection(userId: string): Promise<SpotifyConnectionRow | null> {
   const [row] = await sql<SpotifyConnectionRow[]>`
-    SELECT user_id, access_token, refresh_token, token_expires_at, scopes, connected_at, last_synced_at
+    SELECT user_id, access_token, refresh_token, token_expires_at, scopes, connected_at, last_synced_at, display_name
     FROM   spotify_connections
     WHERE  user_id = ${userId}
   `

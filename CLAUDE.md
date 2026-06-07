@@ -82,6 +82,16 @@ MVP feature-complete. Discovery UI (Journey 2 foundation) shipped.
 
 ---
 
+## Before Adding a Second User / Automating Scrapers
+
+These must be done before the app handles more than one real user or before scraper crons run unattended:
+
+- **Test infrastructure** — wire up Vitest to `api` and `web` packages; add `test` scripts to each `package.json`
+- **Initial test coverage** — unit tests for: date/window logic (`upcomingWeekend`, `upcomingClusters`), affinity scoring, deduplication source priority, scraper data parsers
+- **Nonce one-time-use** — OAuth state currently expires after 10 min (timestamp check) but is not single-use; add nonce persistence when Redis is available
+
+---
+
 ## What AnyWent Is NOT (Yet)
 
 Do not build these in MVP. Flag them and defer:

@@ -15,6 +15,7 @@ const schema = z.object({
   FRONTEND_URL: z.string().default('http://localhost:5173'),
   SENTRY_DSN: z.string().optional(),
   CORS_ORIGIN: z.string().optional(),
+  ADMIN_SECRET: z.string().min(16),
 })
 
 export const env = schema.parse(process.env)
