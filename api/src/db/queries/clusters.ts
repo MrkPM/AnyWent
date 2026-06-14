@@ -8,6 +8,7 @@ export interface ClusterQueryRow {
   event_count:         number
   matched_event_count: number
   cluster_score:       number
+  days:                Array<{ date: string; score: number; matchedCount: number; eventCount: number }> | null
   event_id:            string | null
   event_title:         string | null
   event_starts_at:     string | null
@@ -88,6 +89,29 @@ export async function getClustersByDateRange(
       FROM event_scores
       GROUP BY city_id
     ),
+    city_day_stats AS (
+      SELECT
+        city_id,
+        json_agg(
+          json_build_object(
+            'date',         event_date::text,
+            'score',        day_score,
+            'matchedCount', day_matched_count,
+            'eventCount',   day_event_count
+          ) ORDER BY event_date
+        ) AS days
+      FROM (
+        SELECT
+          city_id,
+          DATE(starts_at)                                      AS event_date,
+          SUM(raw_affinity)::float                             AS day_score,
+          COUNT(*) FILTER (WHERE raw_affinity > 0)::int        AS day_matched_count,
+          COUNT(*)::int                                        AS day_event_count
+        FROM event_scores
+        GROUP BY city_id, DATE(starts_at)
+      ) d
+      GROUP BY city_id
+    ),
     ranked_events AS (
       SELECT *,
         ROW_NUMBER() OVER (
@@ -104,6 +128,7 @@ export async function getClustersByDateRange(
       cs.event_count,
       cs.matched_event_count,
       cs.cluster_score,
+      cds.days,
       re.id             AS event_id,
       re.title          AS event_title,
       re.starts_at      AS event_starts_at,
@@ -114,10 +139,11 @@ export async function getClustersByDateRange(
       re.ticket_url     AS event_ticket_url,
       re.venue_name
     FROM   cluster_stats cs
-    JOIN   cities c         ON c.id  = cs.city_id
-    JOIN   regions r        ON r.id  = c.region_id
-    JOIN   countries co     ON co.id = r.country_id
-    LEFT JOIN ranked_events re ON re.city_id = cs.city_id AND re.event_rank <= 3
+    JOIN   cities c              ON c.id  = cs.city_id
+    JOIN   regions r             ON r.id  = c.region_id
+    JOIN   countries co          ON co.id = r.country_id
+    LEFT JOIN city_day_stats cds ON cds.city_id = cs.city_id
+    LEFT JOIN ranked_events re   ON re.city_id  = cs.city_id AND re.event_rank <= 3
     ORDER BY cs.cluster_score DESC, c.name ASC, re.event_rank ASC NULLS LAST
   `
 }

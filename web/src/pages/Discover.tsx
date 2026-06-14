@@ -45,7 +45,7 @@ function ClusterCard({ cluster, rank }: { cluster: ApiCluster; rank: number }) {
   const navigate = useNavigate()
 
   function go() {
-    navigate(`/?city=${cluster.city.slug}&from=${cluster.from}&to=${cluster.to}`)
+    navigate(`/bundle/${cluster.city.slug}/${cluster.from}/${cluster.to}`, { state: { cluster } })
   }
 
   return (
@@ -105,7 +105,7 @@ export function Discover() {
       <div className={styles.header}>
         <h1 className={styles.heading}>Where next?</h1>
         <p className={styles.subheading}>
-          Thu–Mon windows · ranked by your taste · {clusters.length} options
+          Wed–Tue windows · ranked by your taste · {clusters.length} options
         </p>
       </div>
 

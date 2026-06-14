@@ -81,6 +81,13 @@ export interface ApiBundle {
 
 // ── Clusters ─────────────────────────────────────────────────────────────────
 
+export interface ApiClusterDay {
+  date:         string
+  score:        number
+  matchedCount: number
+  eventCount:   number
+}
+
 export interface ApiCluster {
   city:              ApiCity & { country: string }
   from:              string
@@ -89,6 +96,7 @@ export interface ApiCluster {
   eventCount:        number
   matchedEventCount: number
   topEvents:         BundleTopEvent[]
+  days:              ApiClusterDay[]
 }
 
 export interface ClustersResponse {

@@ -3,28 +3,26 @@ import { authenticateOptional } from '../middleware/auth.js'
 import { getClustersByDateRange, type ClusterQueryRow } from '../db/queries/clusters.js'
 
 // ── Window generation ────────────────────────────────────────────────────────
-// Thu–Mon windows. If today is within a window (Thu–Mon), include the current one.
-// If today is Tue or Wed the current window has ended; start from next Thursday.
+// Wed–Tue windows (7 days). Always anchor to the most recent Wednesday —
+// since the window covers every day of the week there is no "gap" to jump over.
 
 function upcomingClusters(count: number): Array<{ from: string; to: string }> {
   const now = new Date()
   const dow = now.getUTCDay() // 0=Sun … 6=Sat
 
-  // Days since last Thursday (Thu=0, Fri=1, Sat=2, Sun=3, Mon=4, Tue=5, Wed=6)
-  const daysSinceThu = (dow + 3) % 7
-  // If still within the window (0–4 = Thu–Mon), go back to that Thursday.
-  // If the window has ended (5–6 = Tue–Wed), jump forward to next Thursday.
-  const startOffset = daysSinceThu <= 4 ? -daysSinceThu : 7 - daysSinceThu
+  // Days since last Wednesday: Wed=0, Thu=1, Fri=2, Sat=3, Sun=4, Mon=5, Tue=6
+  const daysSinceWed = (dow + 4) % 7
+  const startOffset  = -daysSinceWed
 
   const windows: Array<{ from: string; to: string }> = []
   for (let i = 0; i < count; i++) {
-    const thu = new Date(now)
-    thu.setUTCDate(now.getUTCDate() + startOffset + i * 7)
-    const mon = new Date(thu)
-    mon.setUTCDate(thu.getUTCDate() + 4)
+    const wed = new Date(now)
+    wed.setUTCDate(now.getUTCDate() + startOffset + i * 7)
+    const tue = new Date(wed)
+    tue.setUTCDate(wed.getUTCDate() + 6)
     windows.push({
-      from: thu.toISOString().slice(0, 10),
-      to:   mon.toISOString().slice(0, 10),
+      from: wed.toISOString().slice(0, 10),
+      to:   tue.toISOString().slice(0, 10),
     })
   }
   return windows
@@ -44,6 +42,13 @@ interface ClusterTopEvent {
   venue:         { name: string }
 }
 
+export interface ApiClusterDay {
+  date:         string
+  score:        number
+  matchedCount: number
+  eventCount:   number
+}
+
 export interface ApiCluster {
   city:              { id: string; name: string; slug: string; country: string }
   from:              string
@@ -52,6 +57,7 @@ export interface ApiCluster {
   eventCount:        number
   matchedEventCount: number
   topEvents:         ClusterTopEvent[]
+  days:              ApiClusterDay[]
 }
 
 function assembleClusters(
@@ -79,6 +85,7 @@ function assembleClusters(
       clusterScore:      Number(first.cluster_score),
       eventCount:        first.event_count,
       matchedEventCount: first.matched_event_count,
+      days:              (first.days ?? []) as ApiClusterDay[],
       topEvents: cityRows
         .filter(r => r.event_id !== null)
         .map(r => ({
@@ -100,7 +107,7 @@ function assembleClusters(
 
 export async function clusterRoutes(app: FastifyInstance) {
   // GET /clusters?weeks=8
-  // Returns upcoming Thu–Mon windows with cities ranked by total affinity (cluster score).
+  // Returns upcoming Wed–Tue windows (7 days) with cities ranked by total affinity (cluster score).
   // Flat sorted list across all windows — highest score first.
   app.get<{ Querystring: { weeks?: string } }>(
     '/clusters',

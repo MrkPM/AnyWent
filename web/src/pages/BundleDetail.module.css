@@ -1,0 +1,180 @@
+.page {
+  padding-bottom: 80px;
+}
+
+/* ── Back link ───────────────────────────────────────────────────────────── */
+
+.back {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 32px 0 0;
+  display: block;
+  transition: color 0.12s;
+}
+
+.back:hover { color: var(--text); }
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.header {
+  padding: 28px 0 36px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cityRow {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.cityName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 42px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.countryCode {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  padding: 2px 5px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dateRange {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.dot { color: var(--text-dim); font-size: 10px; }
+
+.scoreLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+
+.eventsMeta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+/* ── 7-day strip ─────────────────────────────────────────────────────────── */
+
+.strip {
+  display: flex;
+  gap: 8px;
+  padding: 40px 0 20px;
+}
+
+.day {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 16px 8px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.12s, opacity 0.12s;
+  min-width: 0;
+}
+
+.day:hover { transform: translateY(-2px); }
+
+.matched {
+  background: var(--accent-dim);
+  border-color: rgba(212, 168, 67, 0.35);
+}
+
+.matched:hover { background: rgba(212, 168, 67, 0.16); }
+
+.dim {
+  background: var(--bg-card);
+  border-color: var(--border);
+  opacity: 0.4;
+}
+
+.dim:hover { opacity: 0.65; }
+
+.dayLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.matched .dayLabel { color: var(--accent); opacity: 0.8; }
+
+.dayNum {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.dayScore {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.dayEvents {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.matched .dayEvents { color: var(--text-secondary); }
+
+/* ── Hint ────────────────────────────────────────────────────────────────── */
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  text-align: center;
+  padding-top: 4px;
+}
+
+/* ── States ──────────────────────────────────────────────────────────────── */
+
+.status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 48px 0;
+  letter-spacing: 0.03em;
+}
