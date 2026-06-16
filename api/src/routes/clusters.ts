@@ -56,6 +56,8 @@ export interface ApiCluster {
   clusterScore:      number
   eventCount:        number
   matchedEventCount: number
+  matchedArtists:    Array<{ name: string; slug: string }>
+  totalArtistCount:  number
   topEvents:         ClusterTopEvent[]
   days:              ApiClusterDay[]
 }
@@ -85,6 +87,8 @@ function assembleClusters(
       clusterScore:      Number(first.cluster_score),
       eventCount:        first.event_count,
       matchedEventCount: first.matched_event_count,
+      matchedArtists:    (first.matched_artists ?? []) as Array<{ name: string; slug: string }>,
+      totalArtistCount:  first.total_artist_count,
       days:              (first.days ?? []) as ApiClusterDay[],
       topEvents: cityRows
         .filter(r => r.event_id !== null)

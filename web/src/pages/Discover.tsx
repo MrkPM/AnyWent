@@ -41,6 +41,30 @@ function SkeletonCard() {
   )
 }
 
+// Show all artists if ≤ this count, otherwise cap at ARTIST_CAP + overflow label.
+// Update this constant once we have stats on the median matched-artist count per bundle.
+const ARTIST_SHOW_ALL_THRESHOLD = 6
+const ARTIST_CAP = 4
+
+function ArtistLine({ artists, totalArtistCount }: {
+  artists: Array<{ name: string; slug: string }>
+  totalArtistCount: number
+}) {
+  if (artists.length === 0) {
+    if (totalArtistCount === 0) return null
+    return <div className={styles.artists}>{totalArtistCount} artists</div>
+  }
+  const showAll   = artists.length <= ARTIST_SHOW_ALL_THRESHOLD
+  const displayed = showAll ? artists : artists.slice(0, ARTIST_CAP)
+  const overflow  = showAll ? 0 : artists.length - ARTIST_CAP
+  return (
+    <div className={styles.artists}>
+      {displayed.map(a => a.name).join(' · ')}
+      {overflow > 0 && <span className={styles.artistsOverflow}> +{overflow} more</span>}
+    </div>
+  )
+}
+
 function ClusterCard({ cluster, rank }: { cluster: ApiCluster; rank: number }) {
   const navigate = useNavigate()
 
@@ -59,13 +83,14 @@ function ClusterCard({ cluster, rank }: { cluster: ApiCluster; rank: number }) {
         </div>
         <div className={styles.meta}>
           <span className={styles.dateRange}>{formatDateRange(cluster.from, cluster.to)}</span>
-          <span className={styles.dot}>·</span>
-          <span className={styles.matchedCount}>{cluster.matchedEventCount} matched</span>
-          <span className={styles.dot}>·</span>
-          <span className={styles.eventCount}>{cluster.eventCount - cluster.matchedEventCount} other</span>
-          <span className={styles.dot}>·</span>
-          <span className={styles.eventCount}>{cluster.eventCount} total</span>
+          {cluster.matchedArtists.length > 0 && (
+            <>
+              <span className={styles.dot}>·</span>
+              <span className={styles.matchedCount}>{cluster.matchedArtists.length} matched</span>
+            </>
+          )}
         </div>
+        <ArtistLine artists={cluster.matchedArtists} totalArtistCount={cluster.totalArtistCount} />
       </div>
 
       <div className={styles.scoreCol}>

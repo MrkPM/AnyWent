@@ -95,6 +95,8 @@ export interface ApiCluster {
   clusterScore:      number
   eventCount:        number
   matchedEventCount: number
+  matchedArtists:    Array<{ name: string; slug: string }>
+  totalArtistCount:  number
   topEvents:         BundleTopEvent[]
   days:              ApiClusterDay[]
 }

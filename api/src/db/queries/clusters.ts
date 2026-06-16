@@ -8,7 +8,9 @@ export interface ClusterQueryRow {
   event_count:         number
   matched_event_count: number
   cluster_score:       number
+  total_artist_count:  number
   days:                Array<{ date: string; score: number; matchedCount: number; eventCount: number }> | null
+  matched_artists:     Array<{ name: string; slug: string }> | null
   event_id:            string | null
   event_title:         string | null
   event_starts_at:     string | null
@@ -112,6 +114,39 @@ export async function getClustersByDateRange(
       ) d
       GROUP BY city_id
     ),
+    city_artist_counts AS (
+      SELECT
+        v.city_id,
+        COUNT(DISTINCT ea.artist_id)::int AS total_artist_count
+      FROM   event_artists ea
+      JOIN   events e  ON e.id  = ea.event_id
+      JOIN   venues v  ON v.id  = e.venue_id
+      WHERE  e.starts_at < ${to}::timestamptz + interval '1 day'
+        AND  COALESCE(e.ends_at, e.starts_at) >= ${from}::timestamptz
+        AND  e.id NOT IN (SELECT id FROM hidden_events)
+      GROUP  BY v.city_id
+    ),
+    cluster_matched_artists AS (
+      SELECT
+        ranked.city_id,
+        json_agg(
+          json_build_object('name', a.name, 'slug', a.slug)
+          ORDER BY ranked.artist_total_weight DESC
+        ) AS matched_artists
+      FROM (
+        SELECT
+          es.city_id,
+          ea.artist_id,
+          SUM(ua.weight) AS artist_total_weight
+        FROM   event_scores es
+        JOIN   event_artists ea  ON ea.event_id  = es.id
+        JOIN   user_affinities ua ON ua.artist_id = ea.artist_id
+        WHERE  es.raw_affinity > 0
+        GROUP  BY es.city_id, ea.artist_id
+      ) ranked
+      JOIN artists a ON a.id = ranked.artist_id
+      GROUP BY ranked.city_id
+    ),
     ranked_events AS (
       SELECT *,
         ROW_NUMBER() OVER (
@@ -128,7 +163,9 @@ export async function getClustersByDateRange(
       cs.event_count,
       cs.matched_event_count,
       cs.cluster_score,
+      COALESCE(cac.total_artist_count, 0) AS total_artist_count,
       cds.days,
+      cma.matched_artists,
       re.id             AS event_id,
       re.title          AS event_title,
       re.starts_at      AS event_starts_at,
@@ -142,8 +179,10 @@ export async function getClustersByDateRange(
     JOIN   cities c              ON c.id  = cs.city_id
     JOIN   regions r             ON r.id  = c.region_id
     JOIN   countries co          ON co.id = r.country_id
-    LEFT JOIN city_day_stats cds ON cds.city_id = cs.city_id
-    LEFT JOIN ranked_events re   ON re.city_id  = cs.city_id AND re.event_rank <= 3
+    LEFT JOIN city_artist_counts cac    ON cac.city_id = cs.city_id
+    LEFT JOIN city_day_stats cds        ON cds.city_id = cs.city_id
+    LEFT JOIN cluster_matched_artists cma ON cma.city_id = cs.city_id
+    LEFT JOIN ranked_events re          ON re.city_id  = cs.city_id AND re.event_rank <= 3
     ORDER BY cs.cluster_score DESC, c.name ASC, re.event_rank ASC NULLS LAST
   `
 }

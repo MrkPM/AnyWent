@@ -1,8 +1,8 @@
 // Songkick scraper — concerts via LD+JSON on metro-area listing pages
 // Endpoint: https://www.songkick.com/metro-areas/{id}-{slug}?page=N
 // Method: LD+JSON extraction from HTML — no API key required (public, structured data)
-// Metro area IDs confirmed via site search 2026-05:
-//   amsterdam=31366, berlin=28443, prague=28425
+// Metro area IDs confirmed via site search 2026-05/06:
+//   amsterdam=31366, berlin=28443, prague=28425, paris=28909, mallorca=71561
 // Note: Songkick does not filter listings by date server-side. We paginate until
 // startDate exceeds dateTo, then stop.
 
@@ -28,11 +28,9 @@ const DELAY_MS = 2000
 export const SONGKICK_LOCALITIES: Record<string, { metroAreaId: number; urlSlug: string; citySlug: string }> = {
   amsterdam: { metroAreaId: 31366, urlSlug: 'netherlands-amsterdam', citySlug: 'amsterdam' },
   berlin:    { metroAreaId: 28443, urlSlug: 'germany-berlin',        citySlug: 'berlin'    },
-  prague:    { metroAreaId: 28425, urlSlug: 'czech-republic-prague', citySlug: 'prague'    },
-  // paris: metroAreaId unverified — Songkick blocked server-side lookups 2026-06.
-  //        Candidate ID: 31408 (france-paris). Verify manually before enabling:
-  //        https://www.songkick.com/metro-areas/31408-france-paris
-  // mallorca: not a Songkick metro area — island destination, skip.
+  paris:     { metroAreaId: 28909, urlSlug: 'france-paris',          citySlug: 'paris'     },
+  prague:    { metroAreaId: 28425, urlSlug: 'czech-republic-prague',      citySlug: 'prague'    },
+  mallorca:  { metroAreaId: 71561, urlSlug: 'spain-palma-de-mallorca',   citySlug: 'mallorca'  },
 }
 
 const HEADERS = {

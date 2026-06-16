@@ -1,0 +1,157 @@
+RA Area ID	City / Region	Region / Sub-Region	Country Code	Area Slug	Full Unique RA Web ID
+29	Amsterdam	Netherlands	nl	amsterdam	nl/amsterdam
+404	Antwerp	Belgium	be	antwerp	be/antwerp
+549	Athens	Greece	gr	athens	gr/athens
+20	Barcelona	Spain	es	barcelona	es/barcelona
+562	Belgrade	Serbia	rs	belgrade	rs/belgrade
+34	Berlin	Germany	de	berlin	de/berlin
+350	Bologna	Italy	it	bologna	it/bologna
+568	Bratislava	Slovakia	sk	bratislava	sk/bratislava
+446	Bristol	United Kingdom (South & West)	uk	bristol	uk/bristol
+405	Brussels	Belgium	be	brussels	be/brussels
+381	Bucharest	Romania	ro	bucharest	ro/bucharest
+449	Budapest	Hungary	hu	budapest	hu/budapest
+17	Chicago	United States	us	chicago	us/chicago
+143	Cologne	Germany	de	cologne	de/cologne
+402	Copenhagen	Denmark	dk	copenhagen	dk/copenhagen
+19	Detroit	United States	us	detroit	us/detroit
+386	Dublin	Ireland	ie	dublin	ie/dublin
+341	Edinburgh	United Kingdom (Scotland)	uk	edinburgh	uk/edinburgh
+147	Frankfurt	Germany	de	frankfurt	de/frankfurt
+392	Geneva	Switzerland	ch	geneva	ch/geneva
+545	Ghent	Belgium	be	ghent	be/ghent
+340	Glasgow	United Kingdom (Scotland)	uk	glasgow	uk/glasgow
+397	Gothenburg	Sweden	se	gothenburg	se/gothenburg
+148	Hamburg	Germany	de	hamburg	de/hamburg
+407	Helsinki	Finland	fi	helsinki	fi/helsinki
+73	Istanbul	Turkey	tr	istanbul	tr/istanbul
+455	Krakow	Poland	pl	krakow	pl/krakow
+517	Kyiv	Ukraine	ua	kyiv	ua/kyiv
+346	Leeds	United Kingdom (North)	uk	leeds	uk/leeds
+149	Leipzig	Germany	de	leipzig	de/leipzig
+53	Lisbon	Portugal	pt	lisbon	pt/lisbon
+563	Ljubljana	Slovenia	si	ljubljana	si/ljubljana
+13	London	United Kingdom	uk	london	uk/london
+337	Lyon	France	fr	lyon	fr/lyon
+41	Madrid	Spain	es	madrid	es/madrid
+661	Mallorca	Spain	es	mallorca	es/mallorca
+344	Manchester	United Kingdom (North)	uk	manchester	uk/manchester
+2	Melbourne	Australia	au	melbourne	au/melbourne
+347	Milan	Italy	it	milan	it/milan
+590	Minneapolis	United States	us	minneapolis	us/minneapolis
+40	Montreal	Canada	ca	montreal	ca/montreal
+88	Moscow	Russia	ru	moscow	ru/moscow
+151	Munich	Germany	de	munich	de/munich
+536	Nantes	France	fr	nantes	fr/nantes
+406	Naples	Italy	it	naples	it/naples
+408	Oslo	Norway	no	oslo	no/oslo
+44	Paris	France	fr	paris	fr/paris
+364	Porto	Portugal	pt	porto	pt/porto
+451	Prague	Czech Republic	cz	prague	cz/prague
+560	Riga	Latvia	lv	riga	lv/riga
+351	Rome	Italy	it	rome	it/rome
+174	Rotterdam	Netherlands	nl	rotterdam	nl/rotterdam
+385	Santiago	Chile	cl	santiago	cl/santiago
+46	Seattle	United States	us	seattle	us/seattle
+537	Seoul	South Korea	kr	seoul	kr/seoul
+558	Sofia	Bulgaria	bg	sofia	bg/sofia
+396	Stockholm	Sweden	se	stockholm	se/stockholm
+1	Sydney	Australia	au	sydney	au/sydney
+566	Tallinn	Estonia	ee	tallinn	ee/tallinn
+188	Tbilisi	Georgia	ge	tbilisi	ge/tbilisi
+657	Thessaloniki	Greece	gr	thessaloniki	gr/thessaloniki
+27	Tokyo	Japan	jp	tokyo	jp/tokyo
+28	Toronto	Canada	ca	toronto	ca/toronto
+175	Utrecht	Netherlands	nl	utrecht	nl/utrecht
+607	Valencia	Spain	es	valencia	es/valencia
+39	Vancouver	Canada	ca	vancouver	ca/vancouver
+450	Vienna	Austria	at	vienna	at/vienna
+561	Vilnius	Lithuania	lt	vilnius	lt/vilnius
+454	Warsaw	Poland	pl	warsaw	pl/warsaw
+559	Zagreb	Croatia	hr	zagreb	hr/zagreb
+390	Zurich	Switzerland	ch	zurich	ch/zurich
+343	Liverpool	United Kingdom (North)	uk	liverpool	uk/liverpool
+520	Sheffield	United Kingdom (North)	uk	sheffield	uk/sheffield
+345	Newcastle	United Kingdom (North)	uk	newcastle	uk/newcastle
+516	Birmingham	United Kingdom (Midlands)	uk	birmingham	uk/birmingham
+544	Nottingham	United Kingdom (Midlands)	uk	nottingham	uk/nottingham
+342	Aberdeen	United Kingdom (Scotland)	uk	aberdeen	uk/aberdeen
+539	Dundee	United Kingdom (Scotland)	uk	dundee	uk/dundee
+534	Belfast	United Kingdom (Northern Ireland)	uk	belfast	uk/belfast
+535	Brighton	United Kingdom (South & West)	uk	brighton	uk/brighton
+518	Cardiff	United Kingdom (South & West)	uk	cardiff	uk/cardiff
+152	Stuttgart	Germany	de	stuttgart	de/stuttgart
+145	Düsseldorf	Germany	de	dusseldorf	de/dusseldorf
+153	Mannheim	Germany	de	mannheim	de/mannheim
+150	Dresden	Germany	de	dresden	de/dresden
+154	Nürnberg	Germany	de	nuremberg	de/nuremberg
+177	Eindhoven	Netherlands	nl	eindhoven	nl/eindhoven
+178	The Hague	Netherlands	nl	thehague	nl/thehague
+25	Ibiza	Spain	es	ibiza	es/ibiza
+612	Bilbao	Spain	es	bilbao	es/bilbao
+608	Malaga	Spain	es	malaga	es/malaga
+	Canary Islands	Spain	es	canaryislands	es/canaryislands
+338	Marseille	France	fr	marseille	fr/marseille
+617	Bordeaux	France	fr	bordeaux	fr/bordeaux
+618	Toulouse	France	fr	toulouse	fr/toulouse
+619	Lille	France	fr	lille	fr/lille
+615	Strasbourg	France	fr	strasbourg	fr/strasbourg
+614	Nice	France	fr	nice	fr/nice
+339	Montpellier	France	fr	montpellier	fr/montpellier
+348	Turin	Italy	it	turin	it/turin
+349	Venice	Italy	it	venice	it/venice
+352	Florence	Italy	it	florence	it/florence
+	Sicily	Italy	it	sicily	it/sicily
+8	New York City	United States	us	newyork	us/newyork
+23	Los Angeles	United States	us	losangeles	us/losangeles
+218	San Francisco / Oakland	United States	us	sanfrancisco	us/sanfrancisco
+38	Miami	United States	us	miami	us/miami
+519	Denver	United States	us	denver	us/denver
+321	Austin	United States	us	austin	us/austin
+530	Boston	United States	us	boston	us/boston
+411	Washington DC	United States	us	washingtondc	us/washingtondc
+528	Philadelphia	United States	us	philadelphia	us/philadelphia
+532	Atlanta	United States	us	atlanta	us/atlanta
+527	Las Vegas	United States	us	lasvegas	us/lasvegas
+125	Portland	United States	us	portland	us/portland
+63	Houston	United States	us	houston	us/houston
+319	Dallas	United States	us	dallas	us/dallas
+74	Ottawa	Canada	ca	ottawa	ca/ottawa
+137	Calgary	Canada	ca	calgary	ca/calgary
+54	Edmonton	Canada	ca	edmonton	ca/edmonton
+	Quebec City	Canada	ca	quebectity	ca/quebectity
+12	Brisbane	Australia	au	brisbane	au/brisbane
+3	Perth	Australia	au	perth	au/perth
+5	Adelaide	Australia	au	adelaide	au/adelaide
+	Byron Bay	Australia	au	byronbay	au/byronbay
+	Canberra	Australia	au	canberra	au/canberra
+664	Osaka	Japan	jp	osaka	jp/osaka
+663	Kyoto	Japan	jp	kyoto	jp/kyoto
+51	Singapore	Singapore	sg	singapore	sg/singapore
+71	Hong Kong	Hong Kong	hk	hongkong	hk/hongkong
+453	Bangkok	Thailand	th	bangkok	th/bangkok
+412	Taipei	Taiwan	tw	taipei	tw/taipei
+543	Bali	Indonesia	id	bali	id/bali
+	Goa	India	in	goa	in/goa
+328	Mumbai	India	in	mumbai	in/mumbai
+324	Delhi	India	in	delhi	in/delhi
+	Hyderabad	India	in	hyderabad	in/hyderabad
+	Bangalore	India	in	bangalore	in/bangalore
+400	São Paulo	Brazil	br	saopaulo	br/saopaulo
+401	Rio de Janeiro	Brazil	br	riodejaneiro	br/riodejaneiro
+	Medellín	Colombia	co	medellin	co/medellin
+	Cali	Colombia	co	cali	co/cali
+395	Buenos Aires	Argentina	ar	buenosaires	ar/buenosaires
+399	Mexico City	Mexico	mx	mexicocity	mx/mexicocity
+	Tulum	Mexico	mx	tulum	mx/tulum
+258	Johannesburg	South Africa	za	johannesburg	za/johannesburg
+100	Cape Town	South Africa	za	capetown	za/capetown
+	Southampton	United Kingdom (South & East)	uk	southampton	uk/southampton
+	Bournemouth	United Kingdom (South & East)	uk	bournemouth	uk/bournemouth
+	Norwich	United Kingdom (South & East)	uk	norwich	uk/norwich
+	Cambridge	United Kingdom (South & East)	uk	cambridge	uk/cambridge
+	Tisno	Croatia (Seasonal)	hr	tisno	hr/tisno
+	Split	Croatia	hr	split	hr/split
+	Pag Island	Croatia (Seasonal)	hr	pag	hr/pag
+	Dhërmi	Albania (Seasonal)	al	dhermi	al/dhermi
+382	Cluj-Napoca	Romania	ro	clujnapoca	ro/clujnapoca
