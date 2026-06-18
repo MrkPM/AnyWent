@@ -22,9 +22,10 @@ export interface ClusterQueryRow {
   venue_name:          string | null
 }
 
-// cluster_score = SUM of actual matched affinity weights (no 0.1 baseline floor).
-// Events with no artist match contribute 0 to the score, so the score purely reflects taste.
-// userId null → all events score 0, cluster_score = 0 for all cities (unauthenticated).
+// cluster_score = SUM of unique matched artist weights per city (deduplicated by artist).
+// An artist playing 5 residency nights contributes their weight once, not 5×.
+// This prevents high-volume cities (Ibiza, Mallorca) from inflating scores via repetition.
+// userId null → cluster_score = 0 for all cities (unauthenticated).
 export async function getClustersByDateRange(
   from:   string,
   to:     string,
@@ -86,8 +87,7 @@ export async function getClustersByDateRange(
       SELECT
         city_id,
         COUNT(*)::int                                    AS event_count,
-        COUNT(*) FILTER (WHERE raw_affinity > 0)::int   AS matched_event_count,
-        SUM(raw_affinity)::float                         AS cluster_score
+        COUNT(*) FILTER (WHERE raw_affinity > 0)::int   AS matched_event_count
       FROM event_scores
       GROUP BY city_id
     ),
@@ -126,6 +126,19 @@ export async function getClustersByDateRange(
         AND  e.id NOT IN (SELECT id FROM hidden_events)
       GROUP  BY v.city_id
     ),
+    cluster_artist_scores AS (
+      -- Deduplicate by (city, artist) so residency artists count once, not once per night
+      SELECT
+        city_id,
+        SUM(weight)::float AS cluster_score
+      FROM (
+        SELECT DISTINCT es.city_id, ua.artist_id, ua.weight
+        FROM   event_scores es
+        JOIN   event_artists ea   ON ea.event_id  = es.id
+        JOIN   user_affinities ua ON ua.artist_id = ea.artist_id
+      ) unique_artists
+      GROUP BY city_id
+    ),
     cluster_matched_artists AS (
       SELECT
         ranked.city_id,
@@ -162,7 +175,7 @@ export async function getClustersByDateRange(
       co.code   AS city_country_code,
       cs.event_count,
       cs.matched_event_count,
-      cs.cluster_score,
+      COALESCE(cas.cluster_score, 0) AS cluster_score,
       COALESCE(cac.total_artist_count, 0) AS total_artist_count,
       cds.days,
       cma.matched_artists,
@@ -179,10 +192,11 @@ export async function getClustersByDateRange(
     JOIN   cities c              ON c.id  = cs.city_id
     JOIN   regions r             ON r.id  = c.region_id
     JOIN   countries co          ON co.id = r.country_id
-    LEFT JOIN city_artist_counts cac    ON cac.city_id = cs.city_id
-    LEFT JOIN city_day_stats cds        ON cds.city_id = cs.city_id
+    LEFT JOIN cluster_artist_scores cas   ON cas.city_id = cs.city_id
+    LEFT JOIN city_artist_counts cac      ON cac.city_id = cs.city_id
+    LEFT JOIN city_day_stats cds          ON cds.city_id = cs.city_id
     LEFT JOIN cluster_matched_artists cma ON cma.city_id = cs.city_id
-    LEFT JOIN ranked_events re          ON re.city_id  = cs.city_id AND re.event_rank <= 3
-    ORDER BY cs.cluster_score DESC, c.name ASC, re.event_rank ASC NULLS LAST
+    LEFT JOIN ranked_events re            ON re.city_id  = cs.city_id AND re.event_rank <= 3
+    ORDER BY COALESCE(cas.cluster_score, 0) DESC, c.name ASC, re.event_rank ASC NULLS LAST
   `
 }

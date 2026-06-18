@@ -129,7 +129,8 @@ export async function clusterRoutes(app: FastifyInstance) {
         }),
       )
 
-      // Flatten all city+window combos into one list, sorted by clusterScore DESC
+      // Flatten all city+window combos into one list, sorted by clusterScore DESC.
+      // Consecutive same-city entries are collapsed into an accordion on the frontend.
       const clusters = results
         .flat()
         .filter(c => c.eventCount > 0)

@@ -24,6 +24,22 @@ async function post(path: string, body: unknown, token: string): Promise<void> {
   if (!res.ok) throw new Error(`API error ${res.status}: ${path}`)
 }
 
+async function postJson<T>(path: string, body: unknown, token: string): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({})) as { error?: string }
+    throw new Error(err.error ?? `API error ${res.status}: ${path}`)
+  }
+  return res.json() as Promise<T>
+}
+
 async function del(path: string, token: string): Promise<void> {
   const res = await fetch(`${BASE}${path}`, {
     method: 'DELETE',
@@ -75,8 +91,8 @@ export async function disconnectSpotify(token: string): Promise<void> {
   return del('/auth/spotify', token)
 }
 
-export async function syncSpotify(token: string): Promise<void> {
-  return post('/auth/spotify/sync', {}, token)
+export async function syncSpotify(token: string): Promise<{ lastSyncedAt: string | null }> {
+  return postJson<{ lastSyncedAt: string | null }>('/auth/spotify/sync', {}, token)
 }
 
 // ── Taste ────────────────────────────────────────────────────────────────────

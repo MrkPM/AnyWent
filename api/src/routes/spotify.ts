@@ -10,9 +10,11 @@ import {
 import { syncSpotifyForUser } from '../jobs/spotify-sync.js'
 import { env } from '../config/env.js'
 
+// bgSync is fire-and-forget — used only for the initial sync after OAuth callback
+// so we don't delay the redirect. Manual sync via POST /auth/spotify/sync awaits directly.
 function bgSync(userId: string) {
   syncSpotifyForUser(userId).catch(err => {
-    console.error('[spotify] sync failed:', err)
+    console.error('[spotify] background sync failed:', err)
     Sentry.captureException(err)
   })
 }
@@ -71,11 +73,20 @@ export async function spotifyRoutes(app: FastifyInstance) {
     return reply.status(204).send()
   })
 
-  // Triggers a re-sync in the background.
+  // Triggers a synchronous re-sync and returns the new lastSyncedAt on success.
+  // Awaiting directly so errors and timing are surfaced to the client.
   app.post('/auth/spotify/sync', { preHandler: authenticate }, async (req, reply) => {
     const conn = await getSpotifyConnection(req.user!.id)
     if (!conn) return reply.status(404).send({ error: 'Spotify not connected' })
-    bgSync(req.user!.id)
-    return reply.status(202).send()
+    try {
+      await syncSpotifyForUser(req.user!.id)
+      const updated = await getSpotifyConnection(req.user!.id)
+      return reply.status(200).send({ lastSyncedAt: updated?.last_synced_at?.toISOString() ?? null })
+    } catch (err) {
+      console.error('[spotify] sync failed:', err)
+      Sentry.captureException(err)
+      const message = err instanceof Error ? err.message : 'Sync failed'
+      return reply.status(500).send({ error: message })
+    }
   })
 }

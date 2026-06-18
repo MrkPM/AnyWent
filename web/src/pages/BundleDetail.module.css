@@ -108,10 +108,10 @@
 
 .matched {
   background: var(--accent-dim);
-  border-color: rgba(212, 168, 67, 0.35);
+  border-color: var(--accent-border);
 }
 
-.matched:hover { background: rgba(212, 168, 67, 0.16); }
+.matched:hover { background: rgba(212, 0, 34, 0.14); }
 
 .dim {
   background: var(--bg-card);

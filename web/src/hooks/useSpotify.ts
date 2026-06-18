@@ -20,6 +20,7 @@ export function useSpotify() {
   const [status, setStatus] = useState<SpotifyStatus | null>(null)
   const [connecting, setConnecting] = useState(false)
   const [syncing, setSyncing] = useState(false)
+  const [syncError, setSyncError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     const token = await getToken()
@@ -57,19 +58,19 @@ export function useSpotify() {
 
   async function sync() {
     setSyncing(true)
+    setSyncError(null)
     try {
       const token = await getToken()
       if (!token) return
-      await syncSpotify(token)
-      // Poll status a couple of times to catch when the background job finishes
-      await new Promise(r => setTimeout(r, 2000))
-      await refresh()
-      await new Promise(r => setTimeout(r, 3000))
-      await refresh()
+      const result = await syncSpotify(token)
+      // Sync is now synchronous — update lastSyncedAt directly from the response
+      setStatus(prev => prev ? { ...prev, lastSyncedAt: result.lastSyncedAt } : prev)
+    } catch (err) {
+      setSyncError(err instanceof Error ? err.message : 'Sync failed')
     } finally {
       setSyncing(false)
     }
   }
 
-  return { status, connecting, syncing, connect, disconnect, sync, refresh }
+  return { status, connecting, syncing, syncError, connect, disconnect, sync, refresh }
 }

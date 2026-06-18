@@ -11,7 +11,7 @@ const DEBOUNCE_MS = 300
 export function Taste() {
   const user = useCurrentUser()
   const { artists: followed, loading, follow, unfollow } = useTaste()
-  const { status: spotifyStatus, connecting, syncing: spotifySyncing, connect: connectSpotify, disconnect: disconnectSpotify, sync: syncSpotify } = useSpotify()
+  const { status: spotifyStatus, connecting, syncing: spotifySyncing, syncError: spotifySyncError, connect: connectSpotify, disconnect: disconnectSpotify, sync: syncSpotify } = useSpotify()
 
   const [query,   setQuery]   = useState('')
   const [results, setResults] = useState<ApiArtist[]>([])
@@ -103,6 +103,9 @@ export function Taste() {
               {connecting ? 'Redirecting…' : 'Connect Spotify'}
             </button>
           </div>
+        )}
+        {spotifySyncError && (
+          <p className={styles.spotifyNoticeError}>{spotifySyncError}</p>
         )}
         {spotifyStatus?.connected && (
           <div className={styles.spotifyConnected}>

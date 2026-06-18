@@ -63,6 +63,8 @@ Already built at `/` (city mode). The most familiar query pattern — closest to
 
 MVP feature-complete. Discovery UI (Journey 2 foundation) shipped.
 
+**City coverage (June 2026):** 19 cities live — Amsterdam, Barcelona, Berlin, Dresden, Florence, Ibiza, Lisbon, Lyon, Mallorca, Marseille, Milan, Munich, Nice, Paris, Porto, Prague, Rome, The Hague, Vienna. London deferred (post-MVP).
+
 ---
 
 ## Tech Stack
@@ -101,7 +103,7 @@ Do not build these in MVP. Flag them and defer:
 - Map view (v2)
 - Multi-user (design for it, build single-user first)
 - Affiliate link integration (post-MVP)
-- Paris, Vienna, London city coverage (post-MVP)
+- London city coverage (post-MVP)
 
 ---
 
@@ -126,6 +128,8 @@ Every new city must be set up in this exact order (FK chain: countries → regio
 2. **Region** — insert into `regions (name, slug, country_id)`
 3. **City** — insert into `cities (name, slug, region_id, lat, lng, ...)`
 4. **Scraper** — add the city to the relevant scraper configs (RA area ID, Songkick metro ID, GoOut locality, etc.)
+   - **RA area IDs**: look up in `data/ra-cities.tsv` — it contains the full global RA city list with area IDs and Songkick counterparts where known. Confirm the ID before adding.
+   - **Songkick metro IDs**: added incrementally as cities are onboarded (not all at once). Confirm via `https://www.songkick.com/metro-areas/{id}-{slug}` and note the date in the scraper comment.
 5. **Source constraint** — if adding a new scraper source for this city, add it to the `source` CHECK constraint in a new migration before writing any data
 
 Deletions must go in reverse order. Always use a migration file — never insert city geography directly in the scraper.
@@ -436,6 +440,23 @@ These weights are the MVP starting point — intentionally simple. The schema (`
 All per-user tables use `user_id TEXT` — the raw Clerk user ID (e.g. `user_2Nz...`). Do not use UUID for user_id in new tables.
 
 `user_connected_accounts` in migration 001 was designed before this was settled — it has `user_id UUID REFERENCES users(id)` and is **never populated**. It is dead schema. For Spotify OAuth tokens we created `spotify_connections` (migration 013) with `user_id TEXT`. Any future per-user tables follow this TEXT pattern.
+
+---
+
+### Supabase RLS on user tables
+
+All per-user tables must have Row Level Security enabled. The pattern:
+
+```sql
+ALTER TABLE <table> ENABLE ROW LEVEL SECURITY;
+-- No policies needed.
+```
+
+No policies are added because our API connects as the postgres superuser (via `postgres.js` direct connection), which has `BYPASSRLS` and ignores all RLS policies. We use Clerk, not Supabase Auth, so `auth.uid()` is not applicable.
+
+The effect: PostgREST (the Supabase REST layer) is completely blocked from accessing these tables — which is what we want. The API is the only entry point.
+
+Tables with RLS confirmed: all tables from migration 012 sweep + `spotify_connections` (migration 017).
 
 ---
 

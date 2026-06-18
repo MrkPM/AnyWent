@@ -55,13 +55,7 @@ export function EventCard({ event }: Props) {
         <span className={styles.datetime}>
           {event.timeKnown ? formatTime(event.startsAt) : '–'}
         </span>
-        <div className={styles.sourceList}>
-          {event.sources.map(s => (
-            <span key={s.source} className={styles.source}>
-              {SOURCE_LABELS[s.source] ?? s.source}
-            </span>
-          ))}
-        </div>
+        {/* source badges hidden for now — SOURCE_LABELS kept for scraper registration */}
       </div>
     </Link>
   )

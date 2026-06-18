@@ -1,0 +1,1 @@
+ALTER TABLE spotify_connections DISABLE ROW LEVEL SECURITY;

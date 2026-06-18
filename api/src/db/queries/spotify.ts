@@ -75,15 +75,16 @@ export async function upsertSpotifyArtist(artist: SpotifyArtist): Promise<string
 }
 
 // Upserts affinities for a batch of artist IDs. Manual follows take precedence over spotify source.
+// Single bulk query via UNNEST instead of N sequential round-trips.
 export async function upsertSpotifyAffinities(userId: string, artistIds: string[]): Promise<void> {
-  for (const artistId of artistIds) {
-    await sql`
-      INSERT INTO user_artist_affinities (user_id, artist_id, weight, source)
-      VALUES (${userId}, ${artistId}, 1.00, 'spotify')
-      ON CONFLICT (user_id, artist_id) DO UPDATE SET
-        weight     = GREATEST(user_artist_affinities.weight, EXCLUDED.weight),
-        source     = CASE WHEN user_artist_affinities.source = 'manual' THEN 'manual' ELSE 'spotify' END,
-        updated_at = now()
-    `
-  }
+  if (artistIds.length === 0) return
+  await sql`
+    INSERT INTO user_artist_affinities (user_id, artist_id, weight, source)
+    SELECT ${userId}, a::uuid, 1.00, 'spotify'
+    FROM   (SELECT DISTINCT unnest(${artistIds}::uuid[]) AS a) deduped
+    ON CONFLICT (user_id, artist_id) DO UPDATE SET
+      weight     = GREATEST(user_artist_affinities.weight, EXCLUDED.weight),
+      source     = CASE WHEN user_artist_affinities.source = 'manual' THEN 'manual' ELSE 'spotify' END,
+      updated_at = now()
+  `
 }

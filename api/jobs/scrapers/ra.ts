@@ -24,11 +24,27 @@ const PAGE_SIZE = 100
 const DELAY_MS = 2000
 
 export const RA_AREAS: Record<string, { id: number; citySlug: string }> = {
-  berlin:    { id: 34,  citySlug: 'berlin' },
+  // Active (already scraped)
+  berlin:    { id: 34,  citySlug: 'berlin'    },
   amsterdam: { id: 29,  citySlug: 'amsterdam' },
-  prague:    { id: 451, citySlug: 'prague' },
-  paris:     { id: 44,  citySlug: 'paris' },
-  mallorca:  { id: 661, citySlug: 'mallorca' }, // RA area covers whole island
+  prague:    { id: 451, citySlug: 'prague'    },
+  paris:     { id: 44,  citySlug: 'paris'     },
+  mallorca:  { id: 661, citySlug: 'mallorca'  },
+  // Tier 1
+  vienna:    { id: 450, citySlug: 'vienna'    },
+  dresden:   { id: 150, citySlug: 'dresden'   },
+  munich:    { id: 151, citySlug: 'munich'    },
+  ibiza:     { id: 25,  citySlug: 'ibiza'     },
+  lyon:      { id: 337, citySlug: 'lyon'      },
+  marseille: { id: 338, citySlug: 'marseille' },
+  nice:      { id: 614, citySlug: 'nice'      },
+  florence:  { id: 352, citySlug: 'florence'  },
+  milan:     { id: 347, citySlug: 'milan'     },
+  rome:      { id: 351, citySlug: 'rome'      },
+  thehague:  { id: 178, citySlug: 'thehague'  },
+  lisbon:    { id: 53,  citySlug: 'lisbon'    },
+  porto:     { id: 364, citySlug: 'porto'     },
+  barcelona: { id: 20,  citySlug: 'barcelona' },
 }
 
 const HEADERS = {

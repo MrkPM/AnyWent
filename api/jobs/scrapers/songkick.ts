@@ -3,6 +3,10 @@
 // Method: LD+JSON extraction from HTML — no API key required (public, structured data)
 // Metro area IDs confirmed via site search 2026-05/06:
 //   amsterdam=31366, berlin=28443, prague=28425, paris=28909, mallorca=71561
+//   vienna=26771, dresden=28467, munich=28549, ibiza=34669
+//   lyon=28889, marseille=156979, nice=28903
+//   florence=30315, milan=30338, rome=30366
+//   thehague=31408, lisbon=31802, porto=31805
 // Note: Songkick does not filter listings by date server-side. We paginate until
 // startDate exceeds dateTo, then stop.
 
@@ -26,11 +30,27 @@ const sql = postgres({
 const DELAY_MS = 2000
 
 export const SONGKICK_LOCALITIES: Record<string, { metroAreaId: number; urlSlug: string; citySlug: string }> = {
-  amsterdam: { metroAreaId: 31366, urlSlug: 'netherlands-amsterdam', citySlug: 'amsterdam' },
-  berlin:    { metroAreaId: 28443, urlSlug: 'germany-berlin',        citySlug: 'berlin'    },
-  paris:     { metroAreaId: 28909, urlSlug: 'france-paris',          citySlug: 'paris'     },
-  prague:    { metroAreaId: 28425, urlSlug: 'czech-republic-prague',      citySlug: 'prague'    },
-  mallorca:  { metroAreaId: 71561, urlSlug: 'spain-palma-de-mallorca',   citySlug: 'mallorca'  },
+  // Active (already scraped)
+  amsterdam: { metroAreaId: 31366,  urlSlug: 'netherlands-amsterdam',   citySlug: 'amsterdam' },
+  berlin:    { metroAreaId: 28443,  urlSlug: 'germany-berlin',          citySlug: 'berlin'    },
+  paris:     { metroAreaId: 28909,  urlSlug: 'france-paris',            citySlug: 'paris'     },
+  prague:    { metroAreaId: 28425,  urlSlug: 'czech-republic-prague',   citySlug: 'prague'    },
+  mallorca:  { metroAreaId: 71561,  urlSlug: 'spain-palma-de-mallorca', citySlug: 'mallorca'  },
+  // Tier 1
+  vienna:    { metroAreaId: 26771,  urlSlug: 'austria-vienna',          citySlug: 'vienna'    },
+  dresden:   { metroAreaId: 28467,  urlSlug: 'germany-dresden',         citySlug: 'dresden'   },
+  munich:    { metroAreaId: 28549,  urlSlug: 'germany-munich',          citySlug: 'munich'    },
+  ibiza:     { metroAreaId: 34669,  urlSlug: 'spain-ibiza',             citySlug: 'ibiza'     },
+  lyon:      { metroAreaId: 28889,  urlSlug: 'france-lyon',             citySlug: 'lyon'      },
+  marseille: { metroAreaId: 156979, urlSlug: 'france-marseille',        citySlug: 'marseille' },
+  nice:      { metroAreaId: 28903,  urlSlug: 'france-nice',             citySlug: 'nice'      },
+  florence:  { metroAreaId: 30315,  urlSlug: 'italy-florence',          citySlug: 'florence'  },
+  milan:     { metroAreaId: 30338,  urlSlug: 'italy-milan',             citySlug: 'milan'     },
+  rome:      { metroAreaId: 30366,  urlSlug: 'italy-rome',              citySlug: 'rome'      },
+  thehague:  { metroAreaId: 31408,  urlSlug: 'netherlands-hague',       citySlug: 'thehague'  },
+  lisbon:    { metroAreaId: 31802,  urlSlug: 'portugal-lisbon',         citySlug: 'lisbon'    },
+  porto:     { metroAreaId: 31805,  urlSlug: 'portugal-porto',          citySlug: 'porto'     },
+  barcelona: { metroAreaId: 28802,  urlSlug: 'spain-barcelona',         citySlug: 'barcelona' },
 }
 
 const HEADERS = {
