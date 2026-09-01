@@ -120,6 +120,31 @@ Do not build these in MVP. Flag them and defer:
 
 ---
 
+## Database / Migrations
+
+Migration files live in `api/src/db/migrations/`. Every applied migration is recorded in the `schema_migrations` table (filename + applied_at timestamp).
+
+**Commands:**
+
+```bash
+# Apply a migration
+pnpm --filter @anywent/api migrate src/db/migrations/020_foo.up.sql
+
+# Roll back a migration
+pnpm --filter @anywent/api migrate src/db/migrations/020_foo.down.sql
+
+# Check for drift — exits 1 if any .up.sql files are not in schema_migrations
+pnpm --filter @anywent/api migrate:status
+```
+
+`migrate:status` is the post-resume check — run it after every Supabase free-tier pause/resume to catch unapplied migrations immediately.
+
+`migrate.ts` records every applied migration automatically — no need to add an INSERT to each SQL file.
+
+**Pre-deploy:** `migrate:status` must exit 0 before deploying to Vercel/Railway. Wire it as a pre-deploy step once hosting is configured — exit code 1 blocks deploy if migrations are unapplied.
+
+---
+
 ## Adding a New City
 
 Every new city must be set up in this exact order (FK chain: countries → regions → cities):
